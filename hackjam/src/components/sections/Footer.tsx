@@ -2,7 +2,7 @@ import { siteConfig } from "@/config/site";
 
 export default function Footer() {
   return (
-    <footer className="flex-1 min-h-0 flex flex-col items-center justify-center px-6 text-white">
+    <footer className="flex flex-col items-center justify-center px-6 py-20 text-white">
       <div className="bg-black/40 backdrop-blur-sm rounded-2xl px-10 py-12 flex flex-col items-center gap-4 text-center">
         <p className="text-2xl font-bold">{siteConfig.name}</p>
         <p className="text-sm text-white/60">Made with ❤️ by the SHPE Tech team</p>

@@ -2,7 +2,7 @@ import { siteConfig } from "@/config/site";
 
 export default function Sponsors() {
   return (
-    <section className="flex-1 min-h-0 flex flex-col items-center justify-center px-6 text-white">
+    <section className="min-h-screen flex flex-col items-center justify-center px-6 py-20 text-white">
       <div className="bg-black/40 backdrop-blur-sm rounded-2xl px-10 py-12 max-w-2xl w-full">
         <h2 className="text-4xl font-bold mb-10 text-center">Our Sponsors</h2>
         <div className="flex flex-wrap gap-6 justify-center">

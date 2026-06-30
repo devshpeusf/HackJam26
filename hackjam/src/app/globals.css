@@ -122,8 +122,21 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
     overflow-x: hidden;
+
+    /* === site background (pure CSS — edit me) ===
+       A dark arcade-themed gradient. `fixed` keeps it still while content
+       scrolls over it. Tweak the colors / add more layers to restyle. */
+    color: #e6f7ff;
+    background-color: #04070d;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(0, 200, 255, 0.12), transparent 45%),
+      radial-gradient(circle at 80% 70%, rgba(120, 0, 255, 0.12), transparent 45%),
+      linear-gradient(160deg, #04070d 0%, #0a1626 55%, #04070d 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
   html {
     @apply font-sans;

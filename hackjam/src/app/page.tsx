@@ -9,17 +9,21 @@ import Footer from "@/components/sections/Footer";
 export default function Home() {
   return (
     <>
+      {/* Fixed full-screen intro overlay; the site below renders normally. */}
       <LoadingScreen />
       {/* #0c3a2a (the image's bottom green) is the fallback so any minor overflow
           below the grass blends in instead of flashing white. */}
       <div className="relative w-full" style={{ backgroundColor: "#0c3a2a" }}>
         {/* In normal flow at w-full h-auto: always shows the WHOLE image scaled
             to the current screen width — full on mobile, full on desktop, never
-            cropped, never zoomed past 1x. */}
+            cropped, never zoomed past 1x. width/height reserve the layout box
+            before load so there's no layout shift. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/background/cascade_hq.webp"
           alt=""
+          width={2000}
+          height={9591}
           className="w-full h-auto block select-none pointer-events-none"
           style={{ imageRendering: "auto" }}
           loading="eager"

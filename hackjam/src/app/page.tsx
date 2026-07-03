@@ -2,7 +2,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import CascadeBackground from "@/components/background/CascadeBackground";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
-import Tracks from "@/components/sections/Tracks";
+import WorldsSection from "@/components/WorldsSection";
 import RocketDescent from "@/components/sections/RocketDescent";
 import Sponsors from "@/components/sections/Sponsors";
 import MeetTheTeam from "@/components/sections/MeetTheTeam";
@@ -20,7 +20,7 @@ export default function Home() {
         <CascadeBackground />
         <Hero />
         <About />
-        <Tracks />
+        <WorldsSection />
         <RocketDescent />
         <Sponsors />
         <MeetTheTeam />

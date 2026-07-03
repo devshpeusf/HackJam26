@@ -1,102 +1,95 @@
-import type { Track } from "@/config/site";
+"use client";
 
-/* Deterministic PRNG — planet terrain must be identical on server and
-   client to avoid hydration mismatches. */
-function mulberry32(seed: number) {
-  return () => {
-    seed |= 0;
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-const GRID = 20;
+import { useEffect, useRef } from "react";
+import { PLANET_DEFS, Planet } from "@/lib/pixelPlanet";
 
 /**
- * Placeholder pixel-art planet drawn in code. When real sprites are
- * exported from deep-fold.itch.io/pixel-planet-generator, set
- * `track.sprite` in site.ts and this component swaps to the image.
+ * Mounts one WebGL pixel-art planet (see lib/pixelPlanet.ts).
+ * Each layer is its own WebGL2 context and browsers cap ~16 live contexts,
+ * so the effect's cleanup MUST dispose the planet on unmount.
  */
 export default function PixelPlanet({
-  track,
-  seed,
-  size = 144,
+  index,
+  size = 300,
+  spin = 0.22,
+  onClick,
+  className,
 }: {
-  track: Track;
-  seed: number;
+  index: number;
   size?: number;
+  spin?: number;
+  onClick?: () => void;
+  className?: string;
 }) {
-  if (track.sprite) {
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={track.sprite}
-        alt=""
-        width={size}
-        height={size}
-        className="crisp select-none"
-        draggable={false}
-      />
-    );
-  }
+  const wrapRef = useRef<HTMLDivElement>(null);
 
-  const { base, shade, highlight } = track.palette;
-  const rand = mulberry32(seed * 7919 + 13);
-  const c = (GRID - 1) / 2;
-  const r = GRID / 2 - 1.2;
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+    const def = PLANET_DEFS[index];
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const cells: { x: number; y: number; fill: string }[] = [];
-  for (let y = 0; y < GRID; y++) {
-    for (let x = 0; x < GRID; x++) {
-      const dx = x - c;
-      const dy = y - c;
-      if (dx * dx + dy * dy > r * r) continue;
-      // Light from the top-left: diagonal position picks the band.
-      const diag = dx + dy;
-      let fill = base;
-      if (diag > r * 0.65) fill = shade;
-      else if (diag < -r * 0.75) fill = highlight;
-      // Deterministic terrain speckles.
-      const n = rand();
-      if (n > 0.86) fill = shade;
-      else if (n < 0.08) fill = highlight;
-      cells.push({ x, y, fill });
-    }
-  }
+    const glCanvases = def.layers.map(() => {
+      const c = document.createElement("canvas");
+      c.width = size;
+      c.height = size;
+      c.style.display = "none";
+      wrap.appendChild(c);
+      return c;
+    });
+    const comp = document.createElement("canvas");
+    comp.width = size;
+    comp.height = size;
+    comp.style.cssText =
+      "width:100%;height:100%;border-radius:50%;display:block;image-rendering:pixelated";
+    wrap.appendChild(comp);
 
-  // Optional flat ring crossing the planet (drawn only where it clears
-  // the disc or passes in front of the lower half).
-  const ring: { x: number; y: number; fill: string }[] = [];
-  if (track.ring) {
-    for (let x = -4; x < GRID + 4; x++) {
-      const y = Math.round(c + (x - c) * 0.28);
-      const dx = x - c;
-      const dy = y - c;
-      const inside = dx * dx + dy * dy <= r * r;
-      if (!inside || y > c) {
-        ring.push({ x, y, fill: highlight });
-        ring.push({ x, y: y + 1, fill: shade });
+    const planet = new Planet(glCanvases, comp, def.layers, reduced ? 0 : spin);
+
+    let raf = 0;
+    let last = 0;
+    let visible = true;
+    const loop = (now: number) => {
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+      planet.render(dt);
+      raf = requestAnimationFrame(loop);
+    };
+    const start = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame((t) => {
+        last = t;
+        loop(t);
+      });
+    };
+    start();
+
+    // Pause rendering while off-screen.
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !visible) {
+        visible = true;
+        start();
+      } else if (!e.isIntersecting && visible) {
+        visible = false;
+        cancelAnimationFrame(raf);
       }
-    }
-  }
+    });
+    io.observe(wrap);
+
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+      planet.dispose();
+      wrap.replaceChildren();
+    };
+  }, [index, size, spin]);
 
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox={`-4 -4 ${GRID + 8} ${GRID + 8}`}
-      shapeRendering="crispEdges"
-      aria-hidden
-      className="select-none"
-    >
-      {cells.map((p, i) => (
-        <rect key={i} x={p.x} y={p.y} width={1} height={1} fill={p.fill} />
-      ))}
-      {ring.map((p, i) => (
-        <rect key={`r${i}`} x={p.x} y={p.y} width={1} height={1} fill={p.fill} />
-      ))}
-    </svg>
+    <div
+      ref={wrapRef}
+      onClick={onClick}
+      className={className}
+      style={{ width: "100%", height: "100%", position: "relative" }}
+    />
   );
 }

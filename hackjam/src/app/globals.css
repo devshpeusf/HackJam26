@@ -209,6 +209,17 @@
     transform: translateY(-12px);
   }
 }
+@keyframes hj-ring-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.08;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.28;
+  }
+}
 @keyframes hj-twinkle {
   0%,
   100% {

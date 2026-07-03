@@ -29,6 +29,15 @@ export type Track = {
   ring?: boolean;
 };
 
+export type WorldTrack = {
+  name: string;
+  num: string;
+  blurb: string;
+  /** Index into PLANET_DEFS (lib/pixelPlanet.ts): 0 Terran, 1 Lunar, 2 Magma, 3 Ringed. */
+  planetIndex: number;
+  stats: { orbit: string; temp: string; radius: string; atm: string };
+};
+
 export const siteConfig = {
   name: "HackJam",
   tagline: "Build something legendary in 24 hours.",
@@ -95,6 +104,50 @@ export const siteConfig = {
       },
     },
   ] satisfies Track[],
+
+  // Placeholder worlds for the Tracks section — swap names/blurbs/stats
+  // when the real track info lands.
+  worlds: [
+    {
+      name: "Deep Mind",
+      num: "TRACK 01",
+      blurb:
+        "AI & machine learning. Train, fine-tune, or prompt your way to something clever.",
+      planetIndex: 0,
+      stats: {
+        orbit: "24 HOURS",
+        temp: "GPU-HOT",
+        radius: "1B PARAMS",
+        atm: "PURE HYPE",
+      },
+    },
+    {
+      name: "Cloud Nine",
+      num: "TRACK 02",
+      blurb:
+        "Web & cloud. Full-stack apps, APIs, and tools people can use the same day.",
+      planetIndex: 3,
+      stats: {
+        orbit: "99.9% UPTIME",
+        temp: "COOL EDGE",
+        radius: "GLOBAL CDN",
+        atm: "VAPORWARE-FREE",
+      },
+    },
+    {
+      name: "Circuit World",
+      num: "TRACK 03",
+      blurb:
+        "Hardware & embedded. Sensors, robots, and things that beep in real life.",
+      planetIndex: 1,
+      stats: {
+        orbit: "60 HZ",
+        temp: "+3.3 V",
+        radius: "0805 SMD",
+        atm: "SOLDER SMOKE",
+      },
+    },
+  ] satisfies WorldTrack[],
 
   faq: [
     {

@@ -122,11 +122,148 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
     overflow-x: hidden;
+    /* Base anchor behind the cascade — prevents flash before paint.
+       The scroll-driven cascade itself lives in CascadeBackground.tsx. */
+    background-color: #07060d;
+    color: #f4f1fb;
+    font-family: var(--font-body);
   }
   html {
-    @apply font-sans;
     overflow-x: hidden;
+  }
+}
+
+/* === HackJam palette tokens — single source of truth (spec §3) === */
+@theme {
+  /* Layer 1 — Void (background depth) */
+  --color-void-900: #0c0a14;
+  --color-void-800: #120f1f;
+  --color-void-700: #1a1530;
+  --color-void-deep: #07060d;
+  /* Layer 2 — Nebula (gas tones, the bulk of the background) */
+  --color-nebula-indigo: #2d1b54;
+  --color-nebula-violet: #5b2f8f;
+  --color-nebula-magenta: #9c2f7d;
+  --color-nebula-rose: #d6489e;
+  --color-nebula-core: #ff70e6;
+  /* Layer 3 — Neon accent (UI / text / glow only, never backgrounds) */
+  --color-accent-magenta: #ff2e97;
+  --color-accent-cyan: #21e6c1;
+  --color-accent-violet: #7b2ff7;
+  /* Layer 4 — Starlight */
+  --color-star-white: #f4f1fb;
+  --color-star-warm: #ffd9a0;
+  /* Cascade zone anchors */
+  --color-sky-zone: #3a6ea5;
+  --color-sunset-orange: #e9743a;
+  --color-sunset-pink: #d6489e;
+  --color-grass: #3f7d3a;
+  /* Logo sunset ramp (sampled from the wordmark) */
+  --color-logo-peach: #eba89b;
+  --color-logo-coral: #ef6359;
+  --color-logo-magenta: #d91f64;
+  --color-logo-rose: #a22155;
+  --color-logo-purple: #630b60;
+}
+
+@theme inline {
+  /* Font variables are set by next/font in layout.tsx */
+  --font-pixel: var(--font-press-start);
+  --font-body: var(--font-space-mono);
+}
+
+@layer components {
+  /* Crisp pixel-art rendering for sprites/gifs */
+  .crisp {
+    image-rendering: pixelated;
+  }
+
+  /* Classic chunky pixel border: plus-shaped box-shadow steps */
+  .pixel-border {
+    box-shadow:
+      0 -4px 0 0 var(--pixel-border-color, currentColor),
+      0 4px 0 0 var(--pixel-border-color, currentColor),
+      -4px 0 0 0 var(--pixel-border-color, currentColor),
+      4px 0 0 0 var(--pixel-border-color, currentColor);
+  }
+
+  /* Raised pixel panel — the "dark pocket" behind content */
+  .pixel-panel {
+    background: color-mix(in srgb, var(--color-void-800) 85%, transparent);
+    box-shadow:
+      0 -4px 0 0 var(--color-void-700),
+      0 4px 0 0 var(--color-void-700),
+      -4px 0 0 0 var(--color-void-700),
+      4px 0 0 0 var(--color-void-700);
+  }
+}
+
+/* === keyframes (transform/opacity only — GPU safe) === */
+@keyframes hj-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes hj-twinkle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+@keyframes hj-glow-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 18px rgba(255, 112, 230, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 34px rgba(255, 112, 230, 0.85));
+  }
+}
+@keyframes hj-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(3%, -2%, 0);
+  }
+}
+@keyframes hj-bounce-down {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+@keyframes hj-flame {
+  0%,
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleY(0.72);
+    opacity: 0.85;
+  }
+}
+
+/* Honor prefers-reduced-motion: freeze all idle loops (spec §8) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

@@ -29,6 +29,15 @@ export type Track = {
   ring?: boolean;
 };
 
+export type RocketSlot = {
+  /** Pixel-art rocket sprite under /public (e.g. "/rockets/booster.png").
+      null renders the code-drawn SVG fallback in RocketLaunchTransition. */
+  src: string | null;
+  /** Horizontal launch position, % of viewport width. */
+  xPercent: number;
+  scale: number;
+};
+
 export type WorldTrack = {
   name: string;
   num: string;
@@ -148,6 +157,17 @@ export const siteConfig = {
       },
     },
   ] satisfies WorldTrack[],
+
+  // Scroll-driven launch transition (between the descent and Sponsors).
+  rocketLaunch: {
+    scrollDistance: 2800, // px of scroll consumed by the pinned launch
+    rocketCount: 3,
+    rockets: [
+      { src: null, xPercent: 28, scale: 0.85 },
+      { src: null, xPercent: 50, scale: 1 },
+      { src: null, xPercent: 72, scale: 0.85 },
+    ] satisfies RocketSlot[],
+  },
 
   faq: [
     {

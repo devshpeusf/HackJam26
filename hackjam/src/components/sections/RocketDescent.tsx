@@ -2,67 +2,7 @@
 
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
-
-/* Pixel rocket drawn as SVG rects, nose down (re-entry). Grid is 12x18. */
-function PixelRocket() {
-  const body = "#f4f1fb";
-  const stripe = "#ef6359";
-  const dark = "#1a1530";
-  const window_ = "#21e6c1";
-  const flame1 = "#ffd9a0";
-  const flame2 = "#e9743a";
-
-  // [x, y, w, h, fill] — remember: nose points DOWN (we're descending).
-  const rects: [number, number, number, number, string][] = [
-    // exhaust flame trails upward (behind the ship as it falls)
-    [5, 0, 2, 2, flame1],
-    [4, 1, 1, 2, flame2],
-    [7, 1, 1, 2, flame2],
-    [5, 2, 2, 1, flame2],
-    // nozzle
-    [4, 3, 4, 1, dark],
-    // body
-    [4, 4, 4, 7, body],
-    [4, 6, 4, 1, stripe],
-    // window
-    [5, 8, 2, 2, window_],
-    [5, 8, 2, 1, "#9be4ff"],
-    // fins (top, since we're inverted)
-    [2, 3, 2, 3, stripe],
-    [8, 3, 2, 3, stripe],
-    [2, 3, 1, 1, dark],
-    [9, 3, 1, 1, dark],
-    // taper to nose cone (pointing down)
-    [4, 11, 4, 1, body],
-    [5, 12, 2, 2, stripe],
-    [5, 14, 2, 1, "#9f1823"],
-  ];
-
-  return (
-    <svg
-      width={120}
-      height={180}
-      viewBox="0 0 12 18"
-      shapeRendering="crispEdges"
-      aria-hidden
-    >
-      <g
-        style={{
-          transformOrigin: "6px 1.5px",
-          animation: "hj-flame 0.35s steps(2) infinite",
-        }}
-      >
-        <rect x={5} y={0} width={2} height={2} fill={flame1} />
-        <rect x={4} y={1} width={1} height={2} fill={flame2} />
-        <rect x={7} y={1} width={1} height={2} fill={flame2} />
-        <rect x={5} y={2} width={2} height={1} fill={flame2} />
-      </g>
-      {rects.slice(4).map(([x, y, w, h, f], i) => (
-        <rect key={i} x={x} y={y} width={w} height={h} fill={f} />
-      ))}
-    </svg>
-  );
-}
+import { PixelCapsule } from "@/components/transitions/RocketSprites";
 
 /**
  * The signature set-piece (spec §7): a scroll-scrubbed re-entry. The section
@@ -133,7 +73,7 @@ export default function RocketDescent() {
         </div>
 
         <div data-rocket className="will-change-transform">
-          <PixelRocket />
+          <PixelCapsule size={104} />
         </div>
 
         <p

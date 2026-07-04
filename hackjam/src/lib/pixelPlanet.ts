@@ -204,34 +204,6 @@ void main(){
   fragColor=vec4(col.rgb,a*col.a);
 }`;
 
-// ── Ring ─────────────────────────────────────────────────────────────────
-const FRAG_RING = `#version 300 es
-precision highp float;
-in vec2 vUV; out vec4 fragColor;
-uniform float u_pixels,u_time_speed,u_lb1,u_lb2,u_ring_width,u_ring_persp,u_scale_rel,u_size,u_seed,u_time,u_rotation;
-uniform vec2 u_light;
-uniform vec4 u_c0,u_c1,u_c2,u_d0,u_d1,u_d2;
-${H1}${NOISE}${ROT}
-void main(){
-  vec2 uv=floor(vUV*u_pixels)/u_pixels;
-  float ld=distance(uv,u_light);
-  uv=rot(uv,u_rotation);
-  vec2 uvc=uv-vec2(0,.5);
-  uvc*=vec2(1,u_ring_persp);
-  float cd=distance(uvc,vec2(.5,0));
-  float ring=smoothstep(.5-u_ring_width*2.,.5-u_ring_width,cd);
-  ring*=smoothstep(cd-u_ring_width,cd,.4);
-  if(uv.y<.5)ring*=step(1./u_scale_rel,distance(uv,vec2(.5)));
-  uvc=rot(uvc+vec2(0,.5),u_time*u_time_speed);
-  ring*=fbm(uvc*u_size);
-  float p=floor((ring+pow(ld,2.)*2.)*4.)/4.;
-  p=min(p,2.);
-  vec4 col;
-  if(p<=1.){float idx=p*2.;if(idx<.5)col=u_c0;else if(idx<1.5)col=u_c1;else col=u_c2;}
-  else{float idx=(p-1.)*2.;if(idx<.5)col=u_d0;else if(idx<1.5)col=u_d1;else col=u_d2;}
-  fragColor=vec4(col.rgb,step(.28,ring)*col.a);
-}`;
-
 // ─── TYPES ─────────────────────────────────────────────────────────────────
 export type UniformSetup = (
   gl: WebGL2RenderingContext,
@@ -543,23 +515,6 @@ export const PLANET_DEFS: PlanetDef[] = [
           U.v4(gl, p, "u_d0", [0.4, 0.3, 0.16, 1]);
           U.v4(gl, p, "u_d1", [0.28, 0.2, 0.09, 1]);
           U.v4(gl, p, "u_d2", [0.15, 0.1, 0.04, 1]);
-        },
-      },
-      {
-        frag: FRAG_RING,
-        setup(gl, p) {
-          base(gl, p, 555, 50, 6.1, 0.06, [0.38, 0.33]);
-          U.f(gl, p, "u_lb1", 0.5);
-          U.f(gl, p, "u_lb2", 0.65);
-          U.f(gl, p, "u_ring_width", 0.08);
-          U.f(gl, p, "u_ring_persp", 3.5);
-          U.f(gl, p, "u_scale_rel", 2.0);
-          U.v4(gl, p, "u_c0", [0.9, 0.82, 0.62, 1]);
-          U.v4(gl, p, "u_c1", [0.72, 0.62, 0.44, 1]);
-          U.v4(gl, p, "u_c2", [0.52, 0.42, 0.28, 1]);
-          U.v4(gl, p, "u_d0", [0.38, 0.28, 0.14, 1]);
-          U.v4(gl, p, "u_d1", [0.24, 0.16, 0.06, 1]);
-          U.v4(gl, p, "u_d2", [0.12, 0.08, 0.02, 1]);
         },
       },
     ],

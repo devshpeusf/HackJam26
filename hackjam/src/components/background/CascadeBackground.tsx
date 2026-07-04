@@ -148,7 +148,7 @@ export default function CascadeBackground() {
 
         {/* Nebula gas — dim, organic, pushed to the edges (upper zones only) */}
         <div
-          className="absolute inset-x-0 top-0 h-[45%] opacity-60"
+          className="absolute inset-x-0 top-0 h-[45%] opacity-25"
           style={{ animation: "hj-drift 40s ease-in-out infinite" }}
         >
           <div
@@ -173,15 +173,6 @@ export default function CascadeBackground() {
             }}
           />
         </div>
-
-        {/* Hero focal light: the glowing magenta core, centered in view 1 */}
-        <div
-          className="absolute left-1/2 top-[45vh] h-[70vh] w-[90vw] -translate-x-1/2 -translate-y-1/2"
-          style={{
-            background:
-              "radial-gradient(ellipse, rgba(255,112,230,0.16) 0%, rgba(255,112,230,0.05) 40%, transparent 70%)",
-          }}
-        />
       </div>
 
       {/* Fixed layers: grid overlay + parallax starfield */}

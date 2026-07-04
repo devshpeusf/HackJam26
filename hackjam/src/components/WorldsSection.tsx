@@ -83,8 +83,8 @@ export default function WorldsSection() {
   // Slide each planet in once its trigger section scrolls into view.
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setVisible(worlds.map(() => true));
-      return;
+      const raf = requestAnimationFrame(() => setVisible(worlds.map(() => true)));
+      return () => cancelAnimationFrame(raf);
     }
     const triggers = triggerRefs.current.map(
       (el, i) =>

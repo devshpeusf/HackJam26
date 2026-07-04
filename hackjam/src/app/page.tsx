@@ -4,6 +4,7 @@ import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import WorldsSection from "@/components/WorldsSection";
 import RocketDescent from "@/components/sections/RocketDescent";
+import RocketLaunchTransition from "@/components/transitions/RocketLaunchTransition";
 import Sponsors from "@/components/sections/Sponsors";
 import MeetTheTeam from "@/components/sections/MeetTheTeam";
 import FAQ from "@/components/sections/FAQ";
@@ -22,6 +23,7 @@ export default function Home() {
         <About />
         <WorldsSection />
         <RocketDescent />
+        <RocketLaunchTransition />
         <Sponsors />
         <MeetTheTeam />
         <FAQ />

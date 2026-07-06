@@ -121,12 +121,39 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
     overflow-x: hidden;
   }
+
   html {
     @apply font-sans;
     overflow-x: hidden;
   }
+}
+
+/* ── Arcade screen text blink ───────────────────────────────────────────────
+   .screen-blink makes the text flicker like an old CRT display.
+   Adjust the `animation` shorthand below to change speed:
+     - 1s  = slow blink
+     - 0.8s = medium (default)
+     - 0.5s = fast blink
+   The `steps(1)` timing makes it a hard on/off flash (arcade style).
+   Change to `ease-in-out` for a smooth pulse instead.
+   ─────────────────────────────────────────────────────────────────────────── */
+@keyframes screenBlink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.screen-blink {
+  animation: screenBlink 2s steps(1) infinite;
 }

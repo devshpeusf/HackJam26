@@ -10,6 +10,7 @@ export default function LoadingScreen() {
   const cabinetRef = useRef<HTMLImageElement>(null);
   const blackRef = useRef<HTMLDivElement>(null);
   const promptRef = useRef<HTMLDivElement>(null);
+  const screenTextRef = useRef<HTMLDivElement>(null);
   const playedRef = useRef(false);
 
   useEffect(() => {
@@ -27,28 +28,27 @@ export default function LoadingScreen() {
       window.removeEventListener("keydown", play);
       overlay.removeEventListener("click", play);
 
+      // ── Timing knobs — adjust these to taste ──────────────────────────────
+      const ZOOM_DURATION    = 1.2;  // seconds: how long the cabinet zooms in
+      const FADE_START       = 0;    // seconds from click: when the overlay starts fading out (0 = same as zoom)
+      const FADE_DURATION    = 1.4;  // seconds: how long the crossfade to the website takes
+      // ──────────────────────────────────────────────────────────────────────
+
       const tl = gsap.timeline();
 
-      // Fade the "press start" prompt out immediately.
-      tl.to(promptRef.current, { opacity: 0, duration: 0.2 }, 0);
+      // Fade the "press start" prompt and screen text out immediately.
+      tl.to(promptRef.current,    { opacity: 0, duration: 0.2 }, 0);
+      tl.to(screenTextRef.current, { opacity: 0, duration: 0.3 }, 0);
 
-      // Zoom INTO the cabinet screen — transformOrigin is set to the screen's
-      // center, so the screen grows to fill the viewport as it scales up.
-      tl.to(cabinet, { scale: 8, ease: "power2.in", duration: 1.2 }, 0);
+      // Zoom and crossfade happen at the same time.
+      tl.to(cabinet, { scale: 8, ease: "power2.in", duration: ZOOM_DURATION }, 0);
 
-      // The growing screen "becomes black" — fully opaque as the zoom peaks.
-      tl.to(black, { opacity: 1, ease: "none", duration: 0.5 }, 0.8);
+      // Fade the entire overlay (room + cabinet) directly to the website — no black.
+      tl.to(overlayRef.current, { opacity: 0, ease: "power2.inOut", duration: FADE_DURATION }, FADE_START);
 
-      // Fully black now: jump the site to the top and drop the room + cabinet
-      // so nothing huge lingers behind the reveal.
+      // Clean up once the fade is done.
       tl.add(() => {
         window.scrollTo(0, 0);
-        gsap.set([roomRef.current, cabinetWrapRef.current], { autoAlpha: 0 });
-      });
-
-      // Reveal the actual website from the very top, then remove the overlay.
-      tl.to(black, { opacity: 0, ease: "power2.out", duration: 0.7 }, ">0.15");
-      tl.add(() => {
         document.body.style.overflow = "";
         overlay.style.display = "none";
       });
@@ -101,6 +101,69 @@ export default function LoadingScreen() {
           style={{ transformOrigin: "50% 25%" }}
           draggable={false}
         />
+
+        {/*
+          ── ARCADE SCREEN TEXT ──────────────────────────────────────────────
+          This div is positioned over the cabinet's screen area and scales
+          with the cabinet zoom since it shares the same parent.
+
+          POSITIONING  → adjust `bottom` and `translateY` to move vertically,
+                          the text is horizontally centered via `left-1/2 -translate-x-1/2`.
+          FONT SIZE    → change `text-[1.4vh]` (relative to viewport height).
+          FONT FAMILY  → change `font-mono` to any Tailwind font or a custom one.
+          LINE SPACING → change `gap-[0.6vh]` between the three lines.
+          COLOR        → text is #3b82f6 (Tailwind blue-500); glow matches it.
+          BLINK SPEED  → controlled by `screenBlink` keyframes in globals.css.
+          ────────────────────────────────────────────────────────────────────
+        */}
+        <div
+          ref={screenTextRef}
+          className="pointer-events-none absolute left-1/2 -translate-x-1/2"
+          style={{
+            // Distance from bottom of the cabinet image to the screen center.
+            // The screen sits at ~25% from the top of the image (same as
+            // transformOrigin), which is ~75% from the bottom.
+            bottom: "59%",
+            // Fine-tune vertical centering within the screen bezel.
+            transform: "translateX(0%) translateY(50%)",
+          }}
+        >
+          <div className="flex flex-col items-center gap-[0.6vh] screen-blink">
+            {/* ── Line 1 ── */}
+            <span
+              className="font-mono uppercase tracking-widest"
+              style={{
+                fontSize: "3vh",        // ← change font size here
+                color: "#3b82f6",         // ← change text color here (blue-500)
+                textShadow: "0 0 8px #3b82f6, 0 0 20px #3b82f6",  // ← glow
+              }}
+            >
+              SHPE @ USF
+            </span>
+            {/* ── Line 2 ── */}
+            <span
+              className="font-mono uppercase tracking-widest"
+              style={{
+                fontSize: "1.4vh",
+                color: "#3b82f6",
+                textShadow: "0 0 8px #3b82f6, 0 0 20px #3b82f6",
+              }}
+            >
+              Presents:
+            </span>
+            {/* ── Line 3 ── */}
+            <span
+              className="font-mono uppercase tracking-widest"
+              style={{
+                fontSize: "3.5vh",
+                color: "green",
+                textShadow: "0 0 8px green, 0 0 20px green",
+              }}
+            >
+              HACKJAM 2026
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Press-start prompt */}

@@ -31,7 +31,7 @@ export type Track = {
 
 export type RocketSlot = {
   /** Pixel-art rocket sprite under /public (e.g. "/rockets/booster.png").
-      null renders the code-drawn SVG fallback in RocketLaunchTransition. */
+      null renders the code-drawn SVG fallback in LaunchReplay. */
   src: string | null;
   /** Horizontal launch position, % of viewport width. */
   xPercent: number;
@@ -158,9 +158,23 @@ export const siteConfig = {
     },
   ] satisfies WorldTrack[],
 
-  // Scroll-driven launch transition (between the descent and Sponsors).
+  // Hidden fourth world — revealed by the Konami code (WorldsSection).
+  secretWorld: {
+    name: "Magma Core",
+    num: "TRACK ??",
+    blurb:
+      "Classified wildcard track. No rules, no category — build anything, as long as it burns bright.",
+    planetIndex: 2,
+    stats: {
+      orbit: "UNSTABLE",
+      temp: "1,200°C",
+      radius: "CLASSIFIED",
+      atm: "SULFUR SMOG",
+    },
+  } satisfies WorldTrack,
+
+  // Click-triggered launch replay (footer "PLAY AGAIN?" overlay).
   rocketLaunch: {
-    scrollDistance: 2800, // px of scroll consumed by the pinned launch
     rocketCount: 3,
     rockets: [
       { src: null, xPercent: 28, scale: 0.85 },

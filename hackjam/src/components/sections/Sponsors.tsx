@@ -142,8 +142,9 @@ export default function Sponsors() {
 
   return (
     <section
+      id="sponsors"
       ref={sectionRef}
-      className="pixel-section-rail relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-4 py-32"
+      className="pixel-section-rail relative flex min-h-[100dvh] scroll-mt-14 flex-col items-center justify-center overflow-hidden px-4 py-32"
       style={{ "--rail-color": "var(--color-star-warm)" } as React.CSSProperties}
     >
       {/* The setting pixel sun — behind the content, sinking on scroll */}

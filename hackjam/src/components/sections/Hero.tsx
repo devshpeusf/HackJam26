@@ -8,7 +8,7 @@ export default function Hero() {
         href={siteConfig.mlh.siteUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="absolute right-4 top-0 z-10 bg-void-800 px-3 pb-3 pt-4 font-pixel text-[8px] leading-relaxed text-star-white sm:right-10"
+        className="absolute right-4 top-14 z-10 bg-void-800 px-3 pb-3 pt-4 font-pixel text-[8px] leading-relaxed text-star-white sm:right-10 md:top-0"
         style={{ borderBottom: "4px solid #ff2e97" }}
       >
         MLH

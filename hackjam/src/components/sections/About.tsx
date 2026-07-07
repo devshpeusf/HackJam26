@@ -6,7 +6,10 @@ const stats = [
 
 export default function About() {
   return (
-    <section className="flex min-h-[100dvh] flex-col items-center justify-center px-4 py-32">
+    <section
+      id="about"
+      className="flex min-h-[100dvh] scroll-mt-14 flex-col items-center justify-center px-4 py-32"
+    >
       <div className="grid w-full max-w-7xl items-center gap-12 px-2 py-10 sm:px-6 lg:grid-cols-[0.95fr_1.15fr] lg:gap-16 xl:max-w-[88rem]">
         <div className="relative flex min-h-72 items-center justify-center px-6 py-10">
           <div
@@ -18,13 +21,21 @@ export default function About() {
             aria-hidden
             className="absolute h-60 w-60 rotate-12 rounded-full border border-nebula-core/18 sm:h-72 sm:w-72"
           />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/gifs/Earth.gif"
-            alt=""
-            className="crisp relative z-10 w-56 sm:w-72"
+          <div
+            className="relative z-10 w-56 sm:w-72"
             style={{ animation: "hj-float 6s ease-in-out infinite" }}
-          />
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/gifs/Earth.gif" alt="" className="crisp w-full" />
+            {/* mascot levitating above the planet, on its own float cycle */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/mascot/hackjam-mascot-levitate.gif"
+              alt=""
+              className="crisp absolute -top-42 left-1/2 z-10 w-24  -translate-x-1/2 sm:-top-40 sm:w-32"
+              style={{ animation: "hj-float 4s ease-in-out 0.8s infinite" }}
+            />
+          </div>
         </div>
 
         <div className="flex flex-col text-left">

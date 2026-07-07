@@ -1,10 +1,11 @@
 import LoadingScreen from "@/components/LoadingScreen";
+import AltitudeHUD from "@/components/AltitudeHUD";
+import Navbar from "@/components/Navbar";
 import CascadeBackground from "@/components/background/CascadeBackground";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import WorldsSection from "@/components/WorldsSection";
 import RocketDescent from "@/components/sections/RocketDescent";
-import RocketLaunchTransition from "@/components/transitions/RocketLaunchTransition";
 import Sponsors from "@/components/sections/Sponsors";
 import MeetTheTeam from "@/components/sections/MeetTheTeam";
 import FAQ from "@/components/sections/FAQ";
@@ -17,17 +18,18 @@ export default function Home() {
   return (
     <>
       <LoadingScreen />
-      <main className="relative w-full max-w-full overflow-x-clip">
+      <Navbar />
+      <main id="top" className="relative w-full max-w-full overflow-x-clip">
         <CascadeBackground />
         <Hero />
         <About />
         <WorldsSection />
         <RocketDescent />
-        <RocketLaunchTransition />
         <Sponsors />
         <MeetTheTeam />
         <FAQ />
         <Footer />
+        <AltitudeHUD />
       </main>
     </>
   );

@@ -3,11 +3,111 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { siteConfig } from "@/config/site";
+import Reveal from "@/components/effects/Reveal";
+import SectionHeading from "@/components/ui/SectionHeading";
+
+/* Empty logo slot: pixel corner brackets around a recessed well — reads as
+   a reserved bay instead of a dashed placeholder box. */
+function LogoSlot({ accent }: { accent: string }) {
+  const corner = { background: accent, opacity: 0.8 } as const;
+  return (
+    <div className="relative flex h-22 w-full items-center justify-center bg-void-deep/70">
+      <span aria-hidden className="absolute left-1 top-1 h-2 w-[3px]" style={corner} />
+      <span aria-hidden className="absolute left-1 top-1 h-[3px] w-2" style={corner} />
+      <span aria-hidden className="absolute right-1 top-1 h-2 w-[3px]" style={corner} />
+      <span aria-hidden className="absolute right-1 top-1 h-[3px] w-2" style={corner} />
+      <span aria-hidden className="absolute bottom-1 left-1 h-2 w-[3px]" style={corner} />
+      <span aria-hidden className="absolute bottom-1 left-1 h-[3px] w-2" style={corner} />
+      <span aria-hidden className="absolute bottom-1 right-1 h-2 w-[3px]" style={corner} />
+      <span aria-hidden className="absolute bottom-1 right-1 h-[3px] w-2" style={corner} />
+      <span className="font-pixel text-[8px] tracking-wider text-star-white/40">
+        RESERVED BAY
+      </span>
+    </div>
+  );
+}
+
+function SponsorCard({
+  tier,
+  logo,
+  name,
+  url,
+  index,
+}: {
+  tier: "gold" | "silver";
+  logo: string;
+  name: string;
+  url: string;
+  index: number;
+}) {
+  const gold = tier === "gold";
+  const accent = gold ? "var(--color-star-warm)" : "var(--color-star-white)";
+  return (
+    <a
+      data-reveal
+      href={url}
+      aria-label={name}
+      className={`pixel-card pixel-card-hover group flex flex-col gap-4 p-5 ${
+        gold ? "min-h-52 justify-between sm:min-h-60" : "min-h-40 justify-center"
+      }`}
+      style={
+        {
+          "--pc-border": gold
+            ? "color-mix(in srgb, var(--color-star-warm) 45%, var(--color-void-700))"
+            : "var(--color-void-700)",
+          "--pc-glow": gold
+            ? "color-mix(in srgb, var(--color-star-warm) 30%, transparent)"
+            : "color-mix(in srgb, var(--color-star-white) 18%, transparent)",
+          "--pc-face": gold
+            ? "color-mix(in srgb, var(--color-logo-rose) 18%, var(--color-void-800))"
+            : "color-mix(in srgb, var(--color-void-800) 88%, var(--color-sky-zone))",
+        } as React.CSSProperties
+      }
+    >
+      <div className="flex items-center justify-between gap-3">
+        <span
+          className="pixel-chip"
+          style={{ color: gold ? "var(--color-star-warm)" : "var(--color-star-white)" }}
+        >
+          {tier.toUpperCase()}
+        </span>
+        <span className="font-pixel text-[8px] text-star-white/35">
+          SLOT {String(index + 1).padStart(2, "0")}
+        </span>
+      </div>
+      {logo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={logo}
+          alt={name}
+          className="crisp mx-auto h-20 max-w-full object-contain transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-105"
+        />
+      ) : (
+        <LogoSlot accent={accent} />
+      )}
+      {gold && (
+        <div className="grid grid-cols-8 gap-1" aria-hidden>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <span
+              key={i}
+              className="h-1"
+              style={{
+                background:
+                  i % 2 === 0
+                    ? "var(--color-star-warm)"
+                    : "color-mix(in srgb, var(--color-star-warm) 25%, transparent)",
+              }}
+            />
+          ))}
+        </div>
+      )}
+    </a>
+  );
+}
 
 /**
- * Sunset zone (spec §6.6–6.7): sponsor placeholder tiles over the warm band.
- * A pixel sun sits behind the grid and sinks toward the horizon as the
- * section scrolls by — the "setting sun" depth effect.
+ * Sunset zone (spec §6.6–6.7): sponsor bays over the warm band. A pixel
+ * sun sinks behind the grid as the section scrolls by.
  */
 export default function Sponsors() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -42,8 +142,10 @@ export default function Sponsors() {
 
   return (
     <section
+      id="sponsors"
       ref={sectionRef}
-      className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-4 py-32"
+      className="pixel-section-rail relative flex min-h-[100dvh] scroll-mt-14 flex-col items-center justify-center overflow-hidden px-4 py-32"
+      style={{ "--rail-color": "var(--color-star-warm)" } as React.CSSProperties}
     >
       {/* The setting pixel sun — behind the content, sinking on scroll */}
       <div
@@ -57,58 +159,49 @@ export default function Sponsors() {
         }}
       />
 
-      <h2 className="mb-4 text-center font-pixel text-base text-void-deep sm:text-lg">
-        SPONSORS
-      </h2>
-      <p className="mb-14 max-w-md text-center text-sm font-bold text-void-deep/80">
-        The people making the descent possible. Want your logo here?
-      </p>
+      <Reveal className="flex w-full flex-col items-center">
+        <SectionHeading
+          title="SPONSORS"
+          sub="The people making the descent possible. Want your logo here?"
+          accent="var(--color-star-warm)"
+          className="mb-14"
+        />
 
-      <div className="flex w-full max-w-3xl flex-col gap-10">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-          {gold.map((s, i) => (
-            <div
-              key={i}
-              className="flex aspect-square flex-col items-center justify-center gap-3 bg-void-deep/80 p-4"
-              style={{ border: "4px dashed rgba(255,217,160,0.6)" }}
-            >
-              <span className="font-pixel text-[10px] text-star-warm">
-                GOLD
-              </span>
-              <span className="text-xs text-star-white/60">
-                Your logo here
-              </span>
-            </div>
-          ))}
+        <div className="flex w-full max-w-5xl flex-col gap-8">
+          <div className="grid grid-cols-1 gap-7 md:grid-cols-[1.15fr_0.85fr_1.15fr]">
+            {gold.map((s, i) => (
+              <SponsorCard
+                key={i}
+                tier="gold"
+                logo={s.logo}
+                name={s.name}
+                url={s.url}
+                index={i}
+              />
+            ))}
+          </div>
+          <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
+            {silver.map((s, i) => (
+              <SponsorCard
+                key={i}
+                tier="silver"
+                logo={s.logo}
+                name={s.name}
+                url={s.url}
+                index={i}
+              />
+            ))}
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {silver.map((s, i) => (
-            <div
-              key={i}
-              className="flex aspect-square flex-col items-center justify-center gap-2 bg-void-deep/70 p-3"
-              style={{ border: "4px dashed rgba(244,241,251,0.4)" }}
-            >
-              <span className="font-pixel text-[8px] text-star-white/80">
-                SILVER
-              </span>
-              <span className="text-[10px] text-star-white/50">
-                Your logo here
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
 
-      <a
-        href="mailto:sponsors@hackjam.dev"
-        className="mt-14 inline-block bg-void-deep px-6 py-4 font-pixel text-[10px] text-star-warm transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105"
-        style={{
-          boxShadow:
-            "0 -4px 0 0 #07060d, 0 4px 0 0 #07060d, -4px 0 0 0 #07060d, 4px 0 0 0 #07060d",
-        }}
-      >
-        BECOME A SPONSOR
-      </a>
+        <a
+          data-reveal
+          href="mailto:sponsors@hackjam.dev"
+          className="pixel-button mt-14 px-6 py-4 font-pixel text-[10px] text-star-warm"
+        >
+          BECOME A SPONSOR
+        </a>
+      </Reveal>
     </section>
   );
 }

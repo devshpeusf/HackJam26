@@ -1,4 +1,6 @@
 import LoadingScreen from "@/components/LoadingScreen";
+import AltitudeHUD from "@/components/AltitudeHUD";
+import Navbar from "@/components/Navbar";
 import CascadeBackground from "@/components/background/CascadeBackground";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
@@ -16,7 +18,8 @@ export default function Home() {
   return (
     <>
       <LoadingScreen />
-      <main className="relative w-full max-w-full overflow-x-clip">
+      <Navbar />
+      <main id="top" className="relative w-full max-w-full overflow-x-clip">
         <CascadeBackground />
         <Hero />
         <About />
@@ -26,6 +29,7 @@ export default function Home() {
         <MeetTheTeam />
         <FAQ />
         <Footer />
+        <AltitudeHUD />
       </main>
     </>
   );

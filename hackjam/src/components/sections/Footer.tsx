@@ -1,19 +1,19 @@
 import { siteConfig } from "@/config/site";
+import LaunchReplay from "@/components/transitions/LaunchReplay";
 
 /** Ground level (spec §6.11): close + MLH compliance requirements. */
 export default function Footer() {
   return (
     <footer className="flex flex-col items-center gap-10 px-4 pb-12 pt-24 text-center">
-      <a
-        href={siteConfig.registrationUrl}
-        className="inline-block bg-accent-magenta px-8 py-4 font-pixel text-xs text-void-deep transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105"
-        style={{
-          boxShadow:
-            "0 -4px 0 0 #ff2e97, 0 4px 0 0 #ff2e97, -4px 0 0 0 #ff2e97, 4px 0 0 0 #ff2e97, 0 0 28px rgba(255,46,151,0.5)",
-        }}
-      >
-        APPLY NOW
-      </a>
+      <div className="flex flex-col items-center gap-6">
+        <LaunchReplay />
+        <a
+          href={siteConfig.registrationUrl}
+          className="pixel-button px-6 py-4 font-pixel text-[10px] text-accent-magenta"
+        >
+          APPLY NOW
+        </a>
+      </div>
 
       <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs">
         <a

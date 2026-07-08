@@ -14,14 +14,8 @@ export default function Hero() {
           }}
         />
 
-        <p className="max-w-xl text-base text-star-white/85 sm:text-lg">
-          {siteConfig.tagline}
-        </p>
-
-        <p className="font-pixel text-[10px] leading-relaxed text-nebula-core sm:text-xs">
+        <p className="font-pixel text-[12px] leading-relaxed text-nebula-core sm:text-[16px]">
           {siteConfig.eventDate} &middot; {siteConfig.venue}
-          <br />
-          <span className="text-star-white/70">{siteConfig.mlh.label}</span>
         </p>
 
         <a

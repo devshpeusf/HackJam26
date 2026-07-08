@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { siteConfig } from "@/config/site";
 
@@ -41,49 +41,91 @@ function DiscordIcon({ className }: { className?: string }) {
   );
 }
 
-/** Hanging banner placeholder — swap for the official MLH season badge. */
-function TempMlhBanner() {
+/** Official MLH 2027-season trust badge — hangs flush from the top edge.
+ *  Rendered inside the bar so it slides in/out with it. */
+function MlhTrustBadge() {
   return (
-    <div
-      className="flex h-[124px] w-[72px] flex-col items-center justify-start gap-1 self-start bg-void-800 pt-5 text-center font-pixel text-[9px] leading-relaxed text-star-white"
-      style={{
-        clipPath: "polygon(0 0, 100% 0, 100% 100%, 50% 88%, 0 100%)",
-        borderInline: "3px solid rgba(255,255,255,0.25)",
-      }}
+    <a
+      id="mlh-trust-badge"
+      href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block w-[72px] shrink-0 self-start sm:w-[90px]"
     >
-      TEMP
-      <br />
-      MLH
-    </div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="https://logged-assets.s3.amazonaws.com/trust-badge/2027/mlh-trust-badge-2027-white.svg"
+        alt="Major League Hacking 2026 Hackathon Season"
+        className="w-full"
+      />
+    </a>
   );
 }
 
 /**
  * Fixed top bar, HackUSF-style alignment: logo left, everything else in one
  * right-aligned row — section links, IG + Discord, APPLY NOW, and the MLH
- * banner hanging flush from the top edge. Hidden during the intro gate,
- * slides in once the gate scrolls away, then stays visible. Collapses to a
- * pixel hamburger + full-screen overlay on small screens.
+ * banner hanging flush from the top edge. Hidden during the intro gate;
+ * past it, hides while scrolling down and slides back in on any scroll up.
+ * Collapses to a pixel hamburger + full-screen overlay on small screens.
  */
 export default function Navbar() {
   const [hidden, setHidden] = useState(true);
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("");
   const reduced = useReducedMotion();
+  const lastY = useRef(0);
 
   useEffect(() => {
-    // Hidden during the intro gate; revealed once its scrub finishes
-    // (LoadingScreen's ScrollTrigger ends half a viewport in) and stays up,
-    // gaining its backdrop at the same mark so content under it stays legible.
-    const onScroll = () => {
+    // Hidden during the intro gate (LoadingScreen's ScrollTrigger ends half a
+    // viewport in). Past it, direction decides visibility: scrolling down
+    // tucks the bar away, scrolling up slides it back in. A small delta
+    // threshold ignores trackpad/scroll-anchoring jitter, and updates are
+    // rAF-batched so at most one state flip lands per frame.
+    lastY.current = window.scrollY;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
       const y = window.scrollY;
+      const delta = y - lastY.current;
       const pastGate = y >= window.innerHeight * 0.5;
-      setHidden(!pastGate);
       setSolid(pastGate);
+      if (!pastGate) {
+        setHidden(true);
+      } else if (Math.abs(delta) > 4) {
+        setHidden(delta > 0);
+      }
+      lastY.current = y;
     };
-    onScroll();
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  // Scroll spy: the section crossing a band around the upper third of the
+  // viewport becomes the active nav link.
+  useEffect(() => {
+    const sections = LINKS.map((l) =>
+      document.querySelector<HTMLElement>(l.href),
+    ).filter((s): s is HTMLElement => s !== null);
+    if (sections.length === 0) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setActive(`#${entry.target.id}`);
+        }
+      },
+      { rootMargin: "-30% 0px -55% 0px" },
+    );
+    sections.forEach((s) => io.observe(s));
+    return () => io.disconnect();
   }, []);
 
   // Menu overlay: Escape closes, body scroll locks while open.
@@ -104,13 +146,15 @@ export default function Navbar() {
     <>
       <nav
         aria-label="Primary"
-        className={`fixed inset-x-0 top-0 z-40 transition-[transform,opacity,background-color,box-shadow] duration-300 ease-out ${
-          hidden ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
+        className={`fixed inset-x-0 top-0 z-40 will-change-transform ${
+          reduced
+            ? ""
+            : "transition-[transform,opacity] duration-300 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
         } ${
-          solid
-            ? "bg-void-deep/80 shadow-[0_3px_0_0_var(--color-void-700)] backdrop-blur-[3px]"
-            : ""
-        }`}
+          hidden
+            ? "pointer-events-none -translate-y-full opacity-0"
+            : "translate-y-0 opacity-100"
+        } ${solid ? "hj-navbar-solid" : ""}`}
       >
         <div className="flex h-18 w-full items-center justify-end px-5 sm:px-8">
           {/* logo */}
@@ -124,6 +168,10 @@ export default function Navbar() {
               src="/logo/hackjam26-triangle.png"
               alt=""
               className="crisp absolute left-0 top-5 h-24 w-auto sm:top-4 sm:h-28"
+              style={{
+                filter:
+                  "drop-shadow(0 0 6px color-mix(in srgb, var(--color-logo-coral) 55%, transparent))",
+              }}
             />
           </a>
 
@@ -133,7 +181,12 @@ export default function Navbar() {
               <a
                 key={l.label}
                 href={l.href}
-                className="hj-nav-link font-pixel text-[11px] tracking-[0.18em] text-star-white/70"
+                aria-current={active === l.href ? "true" : undefined}
+                className={`hj-nav-link font-pixel text-[12px] tracking-[0.18em] ${
+                  active === l.href
+                    ? "hj-nav-link-active"
+                    : "text-star-white/70"
+                }`}
               >
                 {l.label}
               </a>
@@ -158,11 +211,11 @@ export default function Navbar() {
             </a>
             <a
               href={siteConfig.registrationUrl}
-              className="hj-pixel-btn px-4 py-2 font-pixel text-[11px] tracking-[0.12em]"
+              className="hj-pixel-btn px-4 py-2 font-pixel text-[12px] tracking-[0.12em]"
             >
               APPLY NOW
             </a>
-            <TempMlhBanner />
+            <MlhTrustBadge />
           </div>
 
           {/* hamburger (mobile) */}
@@ -210,7 +263,7 @@ export default function Navbar() {
                 initial={{ opacity: 0, y: reduced ? 0 : 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: reduced ? 0 : 0.06 * i, duration: 0.3 }}
-                className="hj-nav-link font-pixel text-sm tracking-[0.2em] text-star-white/80"
+                className="hj-nav-link font-pixel text-[16px] tracking-[0.2em] text-star-white/80"
               >
                 {l.label}
               </motion.a>

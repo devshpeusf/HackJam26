@@ -4,14 +4,22 @@ import LaunchReplay from "@/components/transitions/LaunchReplay";
 /** Ground level (spec §6.11): close + MLH compliance requirements. */
 export default function Footer() {
   return (
-    <footer className="flex flex-col items-center gap-10 px-4 pb-12 pt-24 text-center">
-      <div className="flex flex-col items-center gap-6">
+    <footer className="flex flex-col items-center gap-10 px-4 pb-12 pt-14 text-center">
+      <div className="flex flex-col items-center gap-20">
         <LaunchReplay />
         <a
-          href={siteConfig.registrationUrl}
-          className="pixel-button px-6 py-4 font-pixel text-[10px] text-accent-magenta"
+          href="https://www.shpeusf.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="SHPE at the University of South Florida"
+          className="hj-shpe-logo"
         >
-          APPLY NOW
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo/shpe-usf-horiz-ko.png"
+            alt="SHPE — University of South Florida"
+            className="w-[260px] max-w-[72vw]"
+          />
         </a>
       </div>
 

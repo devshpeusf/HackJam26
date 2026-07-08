@@ -2,41 +2,20 @@ import { siteConfig } from "@/config/site";
 
 export default function Hero() {
   return (
-    <section className="relative flex min-h-[100dvh] flex-col items-center justify-center px-4 py-24 text-center">
-      {/* MLH trust badge — replace with the official season badge embed */}
-      <a
-        href={siteConfig.mlh.siteUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="absolute right-4 top-14 z-10 bg-void-800 px-3 pb-3 pt-4 font-pixel text-[8px] leading-relaxed text-star-white sm:right-10 md:top-0"
-        style={{ borderBottom: "4px solid #ff2e97" }}
-      >
-        MLH
-        <br />
-        MEMBER
-        <br />
-        EVENT
-      </a>
-
+    <section className="relative flex min-h-[100dvh] flex-col items-center justify-start px-4 pb-20 pt-24 text-center sm:pt-28">
       <div className="flex flex-col items-center gap-8">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/gifs/hackjam_logo.gif"
+          src="/logo/hackjam26-words.png"
           alt={siteConfig.name}
-          className="crisp w-[24rem] max-w-full sm:w-[40rem] lg:w-[48rem]"
+          className="crisp w-[min(92vw,64rem)] max-w-full"
           style={{
             animation: "hj-float 5s ease-in-out infinite",
           }}
         />
 
-        <p className="max-w-xl text-base text-star-white/85 sm:text-lg">
-          {siteConfig.tagline}
-        </p>
-
-        <p className="font-pixel text-[10px] leading-relaxed text-nebula-core sm:text-xs">
+        <p className="font-pixel text-[12px] leading-relaxed text-nebula-core sm:text-[16px]">
           {siteConfig.eventDate} &middot; {siteConfig.venue}
-          <br />
-          <span className="text-star-white/70">{siteConfig.mlh.label}</span>
         </p>
 
         <a

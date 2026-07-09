@@ -158,21 +158,6 @@ export const siteConfig = {
     },
   ] satisfies WorldTrack[],
 
-  // Hidden fourth world — revealed by the Konami code (WorldsSection).
-  secretWorld: {
-    name: "Magma Core",
-    num: "TRACK ??",
-    blurb:
-      "Classified wildcard track. No rules, no category — build anything, as long as it burns bright.",
-    planetIndex: 2,
-    stats: {
-      orbit: "UNSTABLE",
-      temp: "1,200°C",
-      radius: "CLASSIFIED",
-      atm: "SULFUR SMOG",
-    },
-  } satisfies WorldTrack,
-
   // Click-triggered launch replay (footer "PLAY AGAIN?" overlay).
   rocketLaunch: {
     rocketCount: 3,

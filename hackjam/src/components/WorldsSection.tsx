@@ -8,20 +8,6 @@ import PixelPlanet from "@/components/PixelPlanet";
 
 const EASE_SPRING = "cubic-bezier(0.34,1.56,0.64,1)";
 
-const KONAMI = [
-  "ArrowUp",
-  "ArrowUp",
-  "ArrowDown",
-  "ArrowDown",
-  "ArrowLeft",
-  "ArrowRight",
-  "ArrowLeft",
-  "ArrowRight",
-  "b",
-  "a",
-];
-const UNLOCK_KEY = "hj-magma-unlocked";
-
 /** One side-mounted planet pod inside its full-height scroll trigger. */
 function PlanetPod({
   world,
@@ -48,6 +34,15 @@ function PlanetPod({
     >
       <div
         onClick={onOpen}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onOpen();
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-label={`View ${world.name} track details`}
         className={`group pointer-events-auto relative h-200 w-200 cursor-pointer will-change-transform max-lg:h-70 max-lg:w-70 ${offX} ${
           visible ? "opacity-100" : "opacity-0"
         }`}
@@ -86,59 +81,13 @@ function PlanetPod({
 }
 
 export default function WorldsSection() {
-  const [unlocked, setUnlocked] = useState(false);
-  const [flash, setFlash] = useState(false);
-  const worlds: WorldTrack[] = unlocked
-    ? [...siteConfig.worlds, siteConfig.secretWorld]
-    : [...siteConfig.worlds];
+  const worlds: WorldTrack[] = siteConfig.worlds;
   const triggerRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [visible, setVisible] = useState<boolean[]>(() =>
     siteConfig.worlds.map(() => false),
   );
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const reduced = useReducedMotion();
-
-  // Restore a previous unlock (persists for the tab session).
-  useEffect(() => {
-    if (sessionStorage.getItem(UNLOCK_KEY) !== "1") return;
-    const raf = requestAnimationFrame(() => {
-      setUnlocked(true);
-      setVisible((v) =>
-        v.length === siteConfig.worlds.length ? [...v, false] : v,
-      );
-    });
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  // Konami code (↑↑↓↓←→←→BA) reveals the hidden Magma world.
-  useEffect(() => {
-    if (unlocked) return;
-    let pos = 0;
-    const onKey = (e: KeyboardEvent) => {
-      const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-      pos = key === KONAMI[pos] ? pos + 1 : key === KONAMI[0] ? 1 : 0;
-      if (pos < KONAMI.length) return;
-      sessionStorage.setItem(UNLOCK_KEY, "1");
-      setUnlocked(true);
-      setVisible((v) => [...v, false]);
-      setFlash(true);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [unlocked]);
-
-  // Unlock flash: linger, then scroll down to the revealed world.
-  useEffect(() => {
-    if (!flash) return;
-    const t = setTimeout(() => {
-      setFlash(false);
-      triggerRefs.current[siteConfig.worlds.length]?.scrollIntoView({
-        behavior: reduced ? "auto" : "smooth",
-        block: "center",
-      });
-    }, 2200);
-    return () => clearTimeout(t);
-  }, [flash, reduced]);
 
   // Slide each planet in once its trigger section scrolls into view.
   useEffect(() => {
@@ -160,7 +109,7 @@ export default function WorldsSection() {
         }),
     );
     return () => triggers.forEach((t) => t && t.kill());
-  }, [worlds.length]);
+  }, []);
 
   // Modal: Escape closes, body scroll locks while open.
   useEffect(() => {
@@ -184,34 +133,8 @@ export default function WorldsSection() {
         TRACKS
       </h2>
       <p className="mx-auto mb-8 max-w-md text-center text-sm text-star-white/70">
-        {unlocked
-          ? "Three tracks. Four worlds. You found the one we buried."
-          : "Three tracks. Three worlds. Pick where your project lands."}
+        Three tracks. Three worlds. Pick where your project lands.
       </p>
-
-      {/* Konami unlock flash */}
-      <AnimatePresence>
-        {flash && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduced ? 0 : 0.35 }}
-            className="pixel-panel fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 px-8 py-6 text-center"
-            style={{
-              boxShadow:
-                "0 -4px 0 0 var(--color-accent-magenta), 0 4px 0 0 var(--color-accent-magenta), -4px 0 0 0 var(--color-accent-magenta), 4px 0 0 0 var(--color-accent-magenta), 0 0 60px 0 color-mix(in srgb, var(--color-accent-magenta) 45%, transparent)",
-            }}
-          >
-            <div className="font-pixel text-[10px] tracking-[0.3em] text-accent-magenta">
-              ⚠ SECRET WORLD DETECTED
-            </div>
-            <div className="mt-3 font-pixel text-[8px] tracking-[0.2em] text-star-white/70">
-              MAGMA CORE UNLOCKED
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {worlds.map((world, i) => (
         <div

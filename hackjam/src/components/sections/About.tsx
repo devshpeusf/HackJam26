@@ -10,8 +10,8 @@ export default function About() {
       id="about"
       className="flex min-h-[100dvh] scroll-mt-14 flex-col items-center justify-center px-4 py-32"
     >
-      <div className="grid w-full max-w-7xl items-center gap-12 px-2 py-10 sm:px-6 lg:grid-cols-[0.95fr_1.15fr] lg:gap-16 xl:max-w-[88rem]">
-        <div className="relative flex min-h-72 items-center justify-center px-6 py-10">
+      <div className="grid w-full max-w-7xl items-start gap-12 px-2 py-10 sm:px-6 lg:grid-cols-[0.95fr_1.15fr] lg:gap-16 xl:max-w-[88rem]">
+        <div className="relative flex min-h-72 items-start justify-center px-6 pb-10 pt-36 sm:pt-40">
           <div
             aria-hidden
             className="absolute h-80 w-80 rounded-full border border-accent-cyan/15 sm:h-96 sm:w-96"

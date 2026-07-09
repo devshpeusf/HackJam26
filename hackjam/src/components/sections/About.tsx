@@ -8,7 +8,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="flex min-h-[100dvh] scroll-mt-14 flex-col items-center justify-center px-4 py-32"
+      className="mt-16 flex min-h-[100dvh] scroll-mt-14 flex-col items-center justify-center px-4 py-32 sm:mt-48"
     >
       <div className="grid w-full max-w-7xl items-start gap-12 px-2 py-10 sm:px-6 lg:grid-cols-[0.95fr_1.15fr] lg:gap-16 xl:max-w-[88rem]">
         <div className="relative flex min-h-72 items-start justify-center px-6 pb-10 pt-36 sm:pt-40">

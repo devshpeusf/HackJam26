@@ -180,8 +180,8 @@ export default function WorldsSection() {
 
   return (
     <section id="tracks" className="relative scroll-mt-14 px-4 py-32">
-      <h2 className="mb-4 text-center font-pixel text-base text-star-white sm:text-lg">
-        CHOOSE YOUR WORLD
+      <h2 className="mb-4 text-center font-pixel text-[24px] text-star-white sm:text-[32px]">
+        TRACKS
       </h2>
       <p className="mx-auto mb-8 max-w-md text-center text-sm text-star-white/70">
         {unlocked

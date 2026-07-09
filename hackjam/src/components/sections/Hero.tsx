@@ -6,12 +6,9 @@ export default function Hero() {
       <div className="flex flex-col items-center gap-8">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/logo/hackjam26-words.png"
+          src="/gifs/HackJam26_black_levitate.gif"
           alt={siteConfig.name}
           className="crisp w-[min(92vw,64rem)] max-w-full"
-          style={{
-            animation: "hj-float 5s ease-in-out infinite",
-          }}
         />
 
         <p className="font-pixel text-[12px] leading-relaxed text-nebula-core sm:text-[16px]">

@@ -17,18 +17,6 @@ export type Sponsor = {
   tier: "gold" | "silver";
 };
 
-export type Track = {
-  name: string;
-  description: string;
-  /** Drop a sprite exported from deep-fold.itch.io/pixel-planet-generator
-      into /public/planets and set its path here to replace the code-drawn
-      placeholder planet. */
-  sprite?: string;
-  /** Placeholder planet colors (base surface, darker shade, highlight, glow). */
-  palette: { base: string; shade: string; highlight: string; glow: string };
-  ring?: boolean;
-};
-
 export type RocketSlot = {
   /** Pixel-art rocket sprite under /public (e.g. "/rockets/booster.png").
       null renders the code-drawn SVG fallback in LaunchReplay. */
@@ -64,55 +52,6 @@ export const siteConfig = {
     discord: "#",
     linkedin: "#",
   },
-
-  // Placeholder tracks — rename freely; each renders as a pixel planet.
-  tracks: [
-    {
-      name: "Deep Mind",
-      description:
-        "AI & machine learning. Train, fine-tune, or prompt your way to something clever.",
-      palette: {
-        base: "#7b2ff7",
-        shade: "#4a1b9e",
-        highlight: "#b78aff",
-        glow: "#9d5cff",
-      },
-    },
-    {
-      name: "Cloud Nine",
-      description:
-        "Web & cloud. Full-stack apps, APIs, and tools people can use the same day.",
-      palette: {
-        base: "#21b6e6",
-        shade: "#0f6fa0",
-        highlight: "#9be4ff",
-        glow: "#3ec9f0",
-      },
-      ring: true,
-    },
-    {
-      name: "Circuit World",
-      description:
-        "Hardware & embedded. Sensors, robots, and things that beep in real life.",
-      palette: {
-        base: "#ef6359",
-        shade: "#9f1823",
-        highlight: "#ffb199",
-        glow: "#ff7a5c",
-      },
-    },
-    {
-      name: "Pixel Playground",
-      description:
-        "Games & creative tech. Build something playful — engines, art tools, or worlds.",
-      palette: {
-        base: "#4caf50",
-        shade: "#2c6b30",
-        highlight: "#a8e6a1",
-        glow: "#6fdd74",
-      },
-    },
-  ] satisfies Track[],
 
   // Placeholder worlds for the Tracks section — swap names/blurbs/stats
   // when the real track info lands.
@@ -157,21 +96,6 @@ export const siteConfig = {
       },
     },
   ] satisfies WorldTrack[],
-
-  // Hidden fourth world — revealed by the Konami code (WorldsSection).
-  secretWorld: {
-    name: "Magma Core",
-    num: "TRACK ??",
-    blurb:
-      "Classified wildcard track. No rules, no category — build anything, as long as it burns bright.",
-    planetIndex: 2,
-    stats: {
-      orbit: "UNSTABLE",
-      temp: "1,200°C",
-      radius: "CLASSIFIED",
-      atm: "SULFUR SMOG",
-    },
-  } satisfies WorldTrack,
 
   // Click-triggered launch replay (footer "PLAY AGAIN?" overlay).
   rocketLaunch: {

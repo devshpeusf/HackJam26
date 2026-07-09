@@ -517,15 +517,6 @@
     opacity: 0.25;
   }
 }
-@keyframes hj-glow-pulse {
-  0%,
-  100% {
-    filter: drop-shadow(0 0 18px rgba(255, 112, 230, 0.5));
-  }
-  50% {
-    filter: drop-shadow(0 0 34px rgba(255, 112, 230, 0.85));
-  }
-}
 @keyframes hj-drift {
   0%,
   100% {
@@ -603,18 +594,6 @@
     opacity: 0;
   }
 }
-@keyframes hj-mascot-flip {
-  0% {
-    transform: rotate(0deg) scale(1);
-  }
-  50% {
-    transform: rotate(180deg) scale(1.15);
-  }
-  100% {
-    transform: rotate(360deg) scale(1);
-  }
-}
-
 /* Honor prefers-reduced-motion: freeze all idle loops (spec §8) */
 @media (prefers-reduced-motion: reduce) {
   *,

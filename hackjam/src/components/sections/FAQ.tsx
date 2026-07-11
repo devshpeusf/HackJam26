@@ -5,16 +5,14 @@ import { siteConfig } from "@/config/site";
 import Reveal from "@/components/effects/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
 
-/** Grass zone (spec §6.9): mission-control terminal accordion.
-    Aesthetic only — same open/close behavior, no command input. */
+/** Pixel accordion inspired by a clean stacked FAQ layout. */
 export default function FAQ() {
-  const [open, setOpen] = useState<number | null>(0);
+  const [open, setOpen] = useState<number | null>(null);
 
   return (
     <section
       id="faq"
-      className="pixel-section-rail flex min-h-[80dvh] scroll-mt-14 flex-col items-center justify-center px-4 py-32"
-      style={{ "--rail-color": "var(--color-logo-coral)" } as React.CSSProperties}
+      className="flex min-h-[70dvh] scroll-mt-14 flex-col items-center justify-center px-4 py-20 sm:py-24"
     >
       <Reveal className="flex w-full flex-col items-center">
         <SectionHeading
@@ -24,109 +22,55 @@ export default function FAQ() {
           className="mb-14"
         />
 
-        <div className="grid w-full max-w-5xl grid-cols-1 gap-5 lg:grid-cols-[0.8fr_1.2fr]">
-          {/* Side terminal: system status */}
-          <div data-reveal className="terminal-window hidden min-h-88 lg:block">
-            <div className="terminal-bar">
-              <span className="terminal-dot bg-logo-coral" />
-              <span className="terminal-dot bg-star-warm" />
-              <span className="terminal-dot bg-accent-cyan" />
-              <span className="ml-2 font-pixel text-[8px] tracking-[0.15em] text-star-white/50">
-                MISSION-CTL
-              </span>
-            </div>
-            <div className="p-6 text-xs leading-loose">
-              <p className="text-star-white/45"># system status</p>
-              {(
-                [
-                  ["uptime", "24:00:00"],
-                  ["hackers", "INBOUND"],
-                  ["mentors", "ONLINE"],
-                  ["coffee", "UNLIMITED"],
-                  ["vibes", "NOMINAL"],
-                ] as const
-              ).map(([k, v]) => (
-                <p key={k}>
-                  <span className="text-accent-cyan">&gt;</span>{" "}
-                  <span className="text-star-white/70">{k}</span>{" "}
-                  <span className="text-logo-coral">{v}</span>
-                </p>
-              ))}
-              <p className="mt-6 text-star-white/45">
-                # Still need help? Message the organizers and we&apos;ll route
-                you to the right station.
-              </p>
-              <p className="mt-4">
-                <span className="text-accent-cyan">hackjam@mission-ctl</span>
-                <span className="text-star-white/70">:~$</span>{" "}
-                <span className="terminal-cursor" aria-hidden />
-              </p>
-            </div>
-          </div>
+        <div className="flex w-full max-w-4xl flex-col gap-4 sm:gap-5">
+          {siteConfig.faq.map((item, i) => {
+            const isOpen = open === i;
+            const answerId = `faq-answer-${i}`;
 
-          {/* Main terminal: the FAQ accordion */}
-          <div data-reveal className="terminal-window">
-            <div className="terminal-bar">
-              <span className="terminal-dot bg-logo-coral" />
-              <span className="terminal-dot bg-star-warm" />
-              <span className="terminal-dot bg-accent-cyan" />
-              <span className="ml-2 font-pixel text-[8px] tracking-[0.15em] text-star-white/50">
-                HACKJAM@MISSION-CTL: ~/FAQ
-              </span>
-            </div>
-            <div className="flex flex-col p-4 sm:p-6">
-              {siteConfig.faq.map((item, i) => {
-                const isOpen = open === i;
-                return (
-                  <div key={i}>
-                    <button
-                      type="button"
-                      onClick={() => setOpen(isOpen ? null : i)}
-                      aria-expanded={isOpen}
-                      className="flex w-full cursor-pointer items-start justify-between gap-4 px-2 py-3.5 text-left transition-colors hover:bg-star-white/4"
-                    >
-                      <span className="text-xs leading-relaxed sm:text-sm">
-                        <span className="text-accent-cyan">$</span>{" "}
-                        <span className="text-star-white/50">
-                          faq --read {String(i + 1).padStart(2, "0")}
-                        </span>{" "}
-                        <span className="font-bold text-star-white">
-                          &quot;{item.question}&quot;
-                        </span>
-                      </span>
-                      <span
-                        aria-hidden
-                        className="mt-0.5 shrink-0 text-xs text-logo-coral"
-                      >
-                        {isOpen ? "[-]" : "[+]"}
-                      </span>
-                    </button>
-                    <div
-                      className="grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"
-                      style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
-                    >
-                      <div className="overflow-hidden">
-                        <p className="px-2 pb-4 pl-6 text-xs leading-relaxed sm:text-sm">
-                          <span className="text-logo-coral">&gt;</span>{" "}
-                          <span className="text-star-white/75">
-                            {item.answer}
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                    {i < siteConfig.faq.length - 1 && (
-                      <div className="mx-2 border-t border-dashed border-star-white/10" />
-                    )}
+            return (
+              <div
+                key={item.question}
+                data-reveal
+                className="bg-void-800/88 transition-colors duration-300 hover:bg-void-700/92"
+                style={{
+                  boxShadow: isOpen
+                    ? "0 -4px 0 0 var(--color-logo-coral), 0 4px 0 0 var(--color-logo-coral), -4px 0 0 0 var(--color-logo-coral), 4px 0 0 0 var(--color-logo-coral)"
+                    : "0 -4px 0 0 var(--color-void-700), 0 4px 0 0 var(--color-void-700), -4px 0 0 0 var(--color-void-700), 4px 0 0 0 var(--color-void-700)",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpen(isOpen ? null : i)}
+                  aria-expanded={isOpen}
+                  aria-controls={answerId}
+                  className="flex min-h-18 w-full cursor-pointer items-center justify-between gap-6 px-5 py-5 text-left sm:min-h-22 sm:px-7"
+                >
+                  <span className="font-pixel text-[9px] leading-loose text-star-white sm:text-[11px]">
+                    {item.question}
+                  </span>
+                  <span
+                    aria-hidden
+                    className={`shrink-0 font-pixel text-xl text-accent-cyan transition-transform duration-300 ${
+                      isOpen ? "rotate-45" : "rotate-0"
+                    }`}
+                  >
+                    +
+                  </span>
+                </button>
+                <div
+                  id={answerId}
+                  className="grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
+                >
+                  <div className="overflow-hidden">
+                    <p className="px-5 pb-6 text-sm leading-7 text-star-white/70 sm:px-7 sm:pb-7">
+                      {item.answer}
+                    </p>
                   </div>
-                );
-              })}
-              <p className="mt-2 px-2 text-xs sm:text-sm">
-                <span className="text-accent-cyan">hackjam@mission-ctl</span>
-                <span className="text-star-white/70">:~/faq$</span>{" "}
-                <span className="terminal-cursor" aria-hidden />
-              </p>
-            </div>
-          </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         <a

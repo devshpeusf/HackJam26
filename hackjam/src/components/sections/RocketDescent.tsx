@@ -3,6 +3,8 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { PixelCapsule } from "@/components/transitions/RocketSprites";
+import AtmosphereClouds from "@/components/effects/AtmosphereClouds";
+import Sponsors from "@/components/sections/Sponsors";
 
 /**
  * The signature set-piece (spec §7): a scroll-scrubbed re-entry. The section
@@ -31,9 +33,32 @@ export default function RocketDescent() {
       tl.fromTo(
         q("[data-rocket]"),
         { yPercent: -180, xPercent: -30, rotation: -6 },
-        { yPercent: 160, xPercent: 30, rotation: 6, ease: "none" },
+        {
+          yPercent: 160,
+          xPercent: 30,
+          rotation: 6,
+          ease: "none",
+          duration: 0.8,
+        },
         0,
       )
+        // Fade the ship in over the first stretch of the descent, so it
+        // materializes as the section scrolls in instead of popping.
+        .fromTo(
+          q("[data-rocket]"),
+          { autoAlpha: 0 },
+          { autoAlpha: 1, duration: 0.15, ease: "none" },
+          0,
+        )
+        // Final dive: drift down-right into the last cloud's mass (the
+        // clouds layer stacks above the scene, so the capsule slips behind
+        // it), then fade as a safety net for viewports the cloud misses.
+        .to(
+          q("[data-rocket]"),
+          { x: "24vw", y: "8vh", rotation: 10, ease: "none", duration: 0.2 },
+          0.8,
+        )
+        .to(q("[data-rocket]"), { autoAlpha: 0, duration: 0.06 }, 0.94)
         .fromTo(
           q("[data-streaks]"),
           { opacity: 0 },
@@ -56,6 +81,14 @@ export default function RocketDescent() {
 
   return (
     <section ref={sectionRef} className="relative h-[300vh]">
+      {/* Clouds sit in normal flow, so they scroll past the pinned scene */}
+      <AtmosphereClouds />
+      {/* Sponsors heading sits above the cloud band; no z-index so the
+          pinned pod scene (later sibling) and the clouds (z-10) both pass
+          in front of it */}
+      <div className="absolute inset-x-0 top-[10%]">
+        <Sponsors />
+      </div>
       <div className="sticky top-0 flex h-[100dvh] items-center justify-center overflow-hidden">
         {/* Speed streaks — vertical lines suggesting velocity */}
         <div data-streaks className="absolute inset-0 opacity-0">

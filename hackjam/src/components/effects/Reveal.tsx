@@ -30,12 +30,13 @@ export default function Reveal({
       const targets = el.querySelectorAll("[data-reveal]");
       gsap.fromTo(
         targets.length ? targets : el,
-        { y: 28, autoAlpha: 0 },
+        { y: 42, scale: 0.96, autoAlpha: 0 },
         {
           y: 0,
+          scale: 1,
           autoAlpha: 1,
-          duration: 0.8,
-          ease: "power3.out",
+          duration: 0.82,
+          ease: "power4.out",
           stagger,
           scrollTrigger: { trigger: el, start, once: true },
         },

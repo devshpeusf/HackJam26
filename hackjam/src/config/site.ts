@@ -17,6 +17,15 @@ export type Sponsor = {
   tier: "gold" | "silver";
 };
 
+export type Judge = {
+  name: string;
+  role: string;
+  photo: string;
+  socials: { linkedin?: string; twitter?: string; website?: string };
+  /** Locked-slot placeholder styling until the judge is confirmed. */
+  tba?: boolean;
+};
+
 export type RocketSlot = {
   /** Pixel-art rocket sprite under /public (e.g. "/rockets/booster.png").
       null renders the code-drawn SVG fallback in LaunchReplay. */
@@ -48,9 +57,9 @@ export const siteConfig = {
     siteUrl: "https://mlh.io",
   },
   socials: {
-    instagram: "#",
+    instagram: "https://www.instagram.com/shpeusf/",
     discord: "#",
-    linkedin: "#",
+    linkedin: "https://www.linkedin.com/company/shpe-usf",
   },
 
   // Placeholder worlds for the Tracks section — swap names/blurbs/stats
@@ -150,6 +159,17 @@ export const siteConfig = {
       socials: { github: "#", twitter: "#" },
     },
   ] satisfies TeamMember[],
+
+  // Placeholder panel — swap names/photos/socials (and drop `tba`) as
+  // judges are confirmed.
+  judges: [
+    { name: "To Be Announced", role: "Seat 01", photo: "", socials: {}, tba: true },
+    { name: "To Be Announced", role: "Seat 02", photo: "", socials: {}, tba: true },
+    { name: "To Be Announced", role: "Seat 03", photo: "", socials: {}, tba: true },
+    { name: "To Be Announced", role: "Seat 04", photo: "", socials: {}, tba: true },
+    { name: "To Be Announced", role: "Seat 05", photo: "", socials: {}, tba: true },
+    { name: "To Be Announced", role: "Seat 06", photo: "", socials: {}, tba: true },
+  ] satisfies Judge[],
 
   sponsors: [
     { name: "Gold Sponsor", logo: "", url: "#", tier: "gold" },

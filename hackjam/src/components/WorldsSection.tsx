@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ScrollTrigger } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { siteConfig, type WorldTrack } from "@/config/site";
 import PixelPlanet from "@/components/PixelPlanet";
 
@@ -21,12 +21,19 @@ function PlanetPod({
   onOpen: () => void;
 }) {
   const side = left
-    ? "-left-90 max-lg:-left-[130px]"
-    : "-right-90 max-lg:-right-[130px]";
+    ? "-left-90 max-xl:-left-18"
+    : "-right-90 max-xl:-right-18";
   const labelSide = left
-    ? "left-[calc(100%+30px)]"
-    : "right-[calc(100%+30px)] text-right";
-  const offX = visible ? "translate-x-0" : left ? "-translate-x-225" : "translate-x-225";
+    ? "left-[calc(100%+30px)] max-xl:left-[calc(100%+12px)]"
+    : "right-[calc(100%+30px)] text-right max-xl:right-[calc(100%+12px)]";
+  // Spin-in entrance: the world rolls in from its edge — offset, rotated a
+  // full-ish turn and scaled down — then springs upright at full size. The
+  // rotation direction matches travel, so it reads as rolling, not twirling.
+  const entrance = visible
+    ? "translateX(0) rotate(0deg) scale(1)"
+    : left
+      ? "translateX(-900px) rotate(-270deg) scale(0.3)"
+      : "translateX(900px) rotate(270deg) scale(0.3)";
 
   return (
     <div
@@ -43,11 +50,12 @@ function PlanetPod({
         role="button"
         tabIndex={0}
         aria-label={`View ${world.name} track details`}
-        className={`group pointer-events-auto relative h-200 w-200 cursor-pointer will-change-transform max-lg:h-70 max-lg:w-70 ${offX} ${
+        className={`group pointer-events-auto relative h-52 w-52 cursor-pointer will-change-transform sm:h-60 sm:w-60 xl:h-200 xl:w-200 ${
           visible ? "opacity-100" : "opacity-0"
         }`}
         style={{
-          transition: `transform .75s ${EASE_SPRING}, opacity .5s ease`,
+          transform: entrance,
+          transition: `transform 1.1s ${EASE_SPRING}, opacity .5s ease`,
         }}
       >
         {/* hover glow */}
@@ -62,16 +70,22 @@ function PlanetPod({
         <div className="h-full w-full transition-transform duration-500 group-hover:scale-105">
           <PixelPlanet index={world.planetIndex} size={800} />
         </div>
-        {/* track label + hint on the inner (visible) side */}
+        {/* track label + faded watermark, same line, + hint on the inner
+            (visible) side */}
         <div
-          className={`pointer-events-none absolute top-1/2 -translate-y-1/2 whitespace-nowrap font-pixel text-[10px] tracking-[0.28em] text-star-white/65 transition-opacity delay-[850ms] duration-400 ${labelSide} ${
-            visible ? "opacity-100" : "opacity-0"
+          className={`hj-pixel-fade pointer-events-none absolute top-1/2 flex -translate-y-1/2 items-baseline gap-4 whitespace-nowrap delay-[850ms] ${labelSide} ${
+            visible ? "is-visible" : ""
           }`}
         >
-          {world.name.toUpperCase()}
+          <span className="font-pixel text-[12px] tracking-[0.14em] text-star-white/80 sm:text-[14px] sm:tracking-[0.18em] xl:text-[20px] xl:tracking-[0.22em]">
+            {world.name.toUpperCase()}
+          </span>
+          <span className="hidden font-pixel text-[16px] tracking-[0.2em] text-star-white/20 xl:inline">
+            {world.num} · {world.name.toUpperCase()}
+          </span>
         </div>
         <div
-          className={`pointer-events-none absolute top-[calc(50%+1.5rem)] -translate-y-1/2 whitespace-nowrap font-pixel text-[8px] tracking-[0.18em] text-accent-violet opacity-0 transition-opacity duration-250 group-hover:opacity-100 ${labelSide}`}
+          className={`pointer-events-none absolute top-[calc(50%+2rem)] hidden -translate-y-1/2 whitespace-nowrap font-pixel text-[11px] tracking-[0.18em] text-accent-violet opacity-0 transition-opacity duration-250 group-hover:opacity-100 xl:block ${labelSide}`}
         >
           CLICK TO EXPAND
         </div>
@@ -81,6 +95,7 @@ function PlanetPod({
 }
 
 export default function WorldsSection() {
+  const sectionRef = useRef<HTMLElement>(null);
   const worlds: WorldTrack[] = siteConfig.worlds;
   const triggerRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [visible, setVisible] = useState<boolean[]>(() =>
@@ -88,6 +103,37 @@ export default function WorldsSection() {
   );
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const reduced = useReducedMotion();
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const ctx = gsap.context(() => {
+        gsap.fromTo(
+          "[data-tracks-intro]",
+          { y: 54, scale: 0.9, autoAlpha: 0 },
+          {
+            y: 0,
+            scale: 1,
+            autoAlpha: 1,
+            duration: 0.85,
+            ease: "power4.out",
+            stagger: 0.14,
+            scrollTrigger: {
+              trigger: section,
+              start: "top 76%",
+              once: true,
+            },
+          },
+        );
+      }, section);
+      return () => ctx.revert();
+    });
+
+    return () => mm.revert();
+  }, []);
 
   // Slide each planet in once its trigger section scrolls into view.
   useEffect(() => {
@@ -128,11 +174,15 @@ export default function WorldsSection() {
   const open = openIdx !== null ? worlds[openIdx] : null;
 
   return (
-    <section id="tracks" className="relative scroll-mt-14 px-4 py-32">
-      <h2 className="mb-4 text-center font-pixel text-[24px] text-star-white sm:text-[32px]">
+    <section ref={sectionRef} id="tracks" className="relative scroll-mt-14 px-4 py-20 sm:py-24">
+      <h2
+        data-tracks-intro
+        className="mb-6 text-center font-pixel text-[clamp(2rem,6vw,4rem)] leading-relaxed text-star-white"
+        style={{ textShadow: "0 4px 18px rgba(0,0,0,0.35)" }}
+      >
         TRACKS
       </h2>
-      <p className="mx-auto mb-8 max-w-md text-center text-sm text-star-white/70">
+      <p data-tracks-intro className="mx-auto mb-8 max-w-3xl text-center font-pixel text-base leading-loose text-star-white/70 sm:text-lg">
         Three tracks. Three worlds. Pick where your project lands.
       </p>
 
@@ -142,15 +192,8 @@ export default function WorldsSection() {
           ref={(el) => {
             triggerRefs.current[i] = el;
           }}
-          className="relative flex h-[110vh] items-center justify-center"
+          className="relative flex h-[68vh] items-center justify-center sm:h-[78vh] xl:h-[92vh]"
         >
-          <span
-            className={`font-pixel text-[10px] tracking-[0.35em] transition-colors duration-600 ${
-              visible[i] ? "text-star-white/20" : "text-star-white/5"
-            }`}
-          >
-            {world.num} · {world.name.toUpperCase()}
-          </span>
           <PlanetPod
             world={world}
             left={i % 2 === 0}

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import Reveal from "@/components/effects/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -48,10 +49,12 @@ function TeamCard({ member, index }: { member: Member; index: number }) {
           }}
         >
           {member.photo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={member.photo}
               alt={member.name}
+              width={112}
+              height={112}
+              sizes="(min-width: 640px) 112px, 96px"
               className="crisp h-24 w-24 object-cover sm:h-28 sm:w-28"
             />
           ) : (

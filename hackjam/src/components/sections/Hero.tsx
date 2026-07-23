@@ -61,7 +61,7 @@ export default function Hero() {
         <a
           data-hero-detail
           href={siteConfig.registrationUrl}
-          className="mt-2 inline-block bg-accent-magenta px-8 py-4 font-pixel text-xs text-void-deep transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105 active:scale-[0.98]"
+          className="mt-2 inline-block bg-accent-magenta px-10 py-5 font-pixel text-sm text-void-deep transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105 active:scale-[0.98]"
           style={{
             boxShadow:
               "0 -4px 0 0 #ff2e97, 0 4px 0 0 #ff2e97, -4px 0 0 0 #ff2e97, 4px 0 0 0 #ff2e97",

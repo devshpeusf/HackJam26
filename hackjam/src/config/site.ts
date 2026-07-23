@@ -52,9 +52,8 @@ export type WorldTrack = {
 export const siteConfig = {
   name: "HackJam",
   tagline: "Build something legendary in 12 hours.",
-  // TODO: replace with the real MLH OrganizerHQ registration link
-  registrationUrl: "#register",
-  eventDate: "Spring 2026",
+  registrationUrl: "https://events.mlh.com/events/14412-hackjam-26",
+  eventDate: "Fall 2026",
   venue: "University of South Florida",
   mlh: {
     label: "An MLH Member Event",
@@ -62,7 +61,7 @@ export const siteConfig = {
     siteUrl: "https://mlh.io",
   },
   socials: {
-    instagram: "https://www.instagram.com/shpeusf/",
+    instagram: "https://www.instagram.com/hackabull/?hl=en",
     discord: "#",
     linkedin: "https://www.linkedin.com/company/shpe-usf",
   },

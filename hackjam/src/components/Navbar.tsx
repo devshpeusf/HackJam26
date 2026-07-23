@@ -222,6 +222,8 @@ export default function Navbar() {
             </a>
             <a
               href={siteConfig.registrationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="hj-pixel-btn px-4 py-2 font-pixel text-[12px] tracking-[0.12em]"
             >
               APPLY NOW
@@ -314,6 +316,8 @@ export default function Navbar() {
             </motion.div>
             <motion.a
               href={siteConfig.registrationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setOpen(false)}
               initial={{ opacity: 0, y: reduced ? 0 : 14 }}
               animate={{ opacity: 1, y: 0 }}

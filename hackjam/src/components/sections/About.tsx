@@ -4,9 +4,9 @@ import { useLayoutEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 
 const stats = [
-  { value: "24", label: "HOURS" },
+  { value: "12", label: "HOURS" },
   { value: "FREE", label: "TO ATTEND" },
-  { value: "1–4", label: "PER TEAM" },
+  { value: "1–3", label: "PER TEAM" },
 ];
 
 export default function About() {
@@ -111,15 +111,15 @@ export default function About() {
           <h2 data-about-copy className="font-pixel text-2xl leading-relaxed text-nebula-core sm:text-4xl">
             WHAT IS HACKJAM?
           </h2>
-          <p data-about-copy className="mt-6 max-w-2xl text-base leading-8 text-star-white/84">
-            HackJam is a 24-hour hackathon organized by SHPE at the University of
+          <p data-about-copy className="mt-6 max-w-2xl text-lg leading-8 text-star-white/84">
+            HackJam is a 12-hour hackathon organized by SHPE at the University of
             South Florida, bringing together students from across the region to
             build innovative projects, attend workshops, and connect with
             industry sponsors.
           </p>
-          <p data-about-copy className="mt-4 max-w-2xl text-sm leading-7 text-star-white/64">
-            First-time hackers and seasoned builders work side by side, with the
-            room, food, mentors, and launch window handled for you.
+          <p data-about-copy className="mt-4 max-w-2xl text-base leading-7 text-star-white/64">
+            First-time hackers and experienced builders work are welcome, with the
+            room, food, and launch window handled for you.
           </p>
 
           <div className="mt-9 grid grid-cols-1 gap-4 sm:grid-cols-3">

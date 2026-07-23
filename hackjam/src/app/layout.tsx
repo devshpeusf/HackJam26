@@ -17,7 +17,7 @@ const spaceMono = Space_Mono({
 export const metadata: Metadata = {
   title: "HackJam",
   description:
-    "A scroll-driven descent through space. HackJam — a 24-hour hackathon by SHPE USF. An MLH Member Event.",
+    "A scroll-driven descent through space. HackJam — a 12-hour hackathon by SHPE USF. An MLH Member Event.",
 };
 
 export default function RootLayout({

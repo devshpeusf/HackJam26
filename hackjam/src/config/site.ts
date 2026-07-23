@@ -6,9 +6,14 @@ export type FaqItem = {
 export type TeamMember = {
   name: string;
   role: string;
+  team: string;
   photo: string;
-  socials: { github?: string; linkedin?: string; twitter?: string };
+  /** LinkedIn profile URL — the whole card links here. */
+  linkedin: string;
 };
+
+// TODO: swap "#" for each member's real LinkedIn URL when links are provided.
+const LINKEDIN_PLACEHOLDER = "#";
 
 export type Sponsor = {
   name: string;
@@ -46,7 +51,7 @@ export type WorldTrack = {
 
 export const siteConfig = {
   name: "HackJam",
-  tagline: "Build something legendary in 24 hours.",
+  tagline: "Build something legendary in 12 hours.",
   // TODO: replace with the real MLH OrganizerHQ registration link
   registrationUrl: "#register",
   eventDate: "Spring 2026",
@@ -72,7 +77,7 @@ export const siteConfig = {
         "AI & machine learning. Train, fine-tune, or prompt your way to something clever.",
       planetIndex: 0,
       stats: {
-        orbit: "24 HOURS",
+        orbit: "12 HOURS",
         temp: "GPU-HOT",
         radius: "1B PARAMS",
         atm: "PURE HYPE",
@@ -120,7 +125,7 @@ export const siteConfig = {
     {
       question: "Who can participate in HackJam?",
       answer:
-        "HackJam is open to all currently enrolled college students. Teams of 1–4 members are welcome.",
+        "HackJam is open to all currently enrolled college students. Teams of 1–3 members are welcome.",
     },
     {
       question: "How much does it cost to attend?",
@@ -141,22 +146,123 @@ export const siteConfig = {
 
   team: [
     {
-      name: "Alex Rivera",
-      role: "Organizer Lead",
-      photo: "",
-      socials: { github: "#", linkedin: "#" },
+      name: "Adriana Martinez",
+      role: "President",
+      team: "Executive",
+      photo: "/team/adriana-martinez.jpg",
+      linkedin: LINKEDIN_PLACEHOLDER,
     },
     {
-      name: "Jordan Lee",
-      role: "Logistics Director",
+      name: "Jorge Arevalo",
+      role: "Assistant Lead",
+      team: "Executive",
       photo: "",
-      socials: { linkedin: "#" },
+      linkedin: LINKEDIN_PLACEHOLDER,
     },
     {
-      name: "Sam Patel",
-      role: "Tech Lead",
-      photo: "",
-      socials: { github: "#", twitter: "#" },
+      name: "Gregory Ramirez",
+      role: "Lead",
+      team: "Tech Initiatives",
+      photo: "/team/gregory-ramirez.jpeg",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Prachi Lohana",
+      role: "Director",
+      team: "Tech Initiatives",
+      photo: "/team/prachi-lohana.jpeg",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Sara Suleiman",
+      role: "Social Media Manager",
+      team: "Marketing",
+      photo: "/team/sara-suleiman.jpeg",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Karishma Kalloo",
+      role: "Lead",
+      team: "Hacker's Experience",
+      photo: "/team/karishma-kalloo.jpeg",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Andres Pistocchi",
+      role: "Director",
+      team: "Hacker's Experience",
+      photo: "/team/andres-pistocchi.jpeg",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Ian Lopez",
+      role: "Lead",
+      team: "Web Development",
+      photo: "/team/ian-lopez.jpeg",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Gabriel Marchiori de Almeida",
+      role: "Co Lead",
+      team: "Web Development",
+      photo: "/team/gabriel-marchiori-de-almeida.jpeg",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Jacob Bhatt",
+      role: "Design / UI-UX Lead",
+      team: "Web Development",
+      photo: "/team/jacob-bhatt.jpeg",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Daniel Misherky",
+      role: "Digital Assets Director",
+      team: "Web Development",
+      photo: "/team/daniel-misherky.jpeg",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Alejandra Quintana Roman",
+      role: "Director",
+      team: "Logistics",
+      photo: "/team/alejandra-quintana-roman.jpg",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Tomas Torrado",
+      role: "Lead",
+      team: "Tech Development",
+      photo: "/team/tomas-torrado.jpeg",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Sayeda Zahraa Tanaaz Alam",
+      role: "Co Lead",
+      team: "Tech Development",
+      photo: "/team/sayeda-zahraa-tanaaz-alam.jpeg",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Juan Caicedo",
+      role: "Director",
+      team: "Tech Development",
+      photo: "/team/juan-caicedo.jpeg",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Nishtha Krukeja",
+      role: "Lead",
+      team: "Workshop",
+      photo: "/team/nishtha-krukeja.jpeg",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Alexander Sonkin",
+      role: "Lead",
+      team: "Ambassador",
+      photo: "/team/alexander-sonkin.jpeg",
+      linkedin: LINKEDIN_PLACEHOLDER,
     },
   ] satisfies TeamMember[],
 

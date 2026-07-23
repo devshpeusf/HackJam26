@@ -13,11 +13,16 @@ function initials(name: string) {
 type Member = (typeof siteConfig.team)[number];
 
 /* Pixel crew card — same design language as the rest of the site:
-   pixel-card chrome, cyan-cornered portrait, chip socials. */
+   pixel-card chrome, cyan-cornered portrait. The whole card links to the
+   member's LinkedIn profile. */
 function TeamCard({ member, index }: { member: Member; index: number }) {
   return (
-    <div
-      className="pixel-card group flex w-52 shrink-0 flex-col px-4 py-5 sm:w-60 sm:px-5 sm:py-6"
+    <a
+      href={member.linkedin}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${member.name} on LinkedIn`}
+      className="pixel-card group flex w-56 shrink-0 flex-col px-4 py-5 transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-1 sm:w-64 sm:px-5 sm:py-6"
       style={
         {
           "--pc-glow":
@@ -47,10 +52,10 @@ function TeamCard({ member, index }: { member: Member; index: number }) {
             <img
               src={member.photo}
               alt={member.name}
-              className="crisp h-20 w-20 object-cover sm:h-24 sm:w-24"
+              className="crisp h-24 w-24 object-cover sm:h-28 sm:w-28"
             />
           ) : (
-            <div className="flex h-20 w-20 items-center justify-center bg-void-700 font-pixel text-sm text-nebula-core sm:h-24 sm:w-24 sm:text-base">
+            <div className="flex h-24 w-24 items-center justify-center bg-void-700 font-pixel text-sm text-nebula-core sm:h-28 sm:w-28 sm:text-base">
               {initials(member.name)}
             </div>
           )}
@@ -62,23 +67,12 @@ function TeamCard({ member, index }: { member: Member; index: number }) {
           <span className="mt-2 block text-xs leading-relaxed text-accent-cyan">
             {member.role}
           </span>
+          <span className="mt-1 block font-pixel text-[10px] uppercase leading-relaxed text-accent-magenta">
+            {member.team}
+          </span>
         </div>
       </div>
-      <div className="mt-4 flex flex-wrap justify-center gap-2 sm:mt-5">
-        {Object.entries(member.socials).map(([network, href]) =>
-          href ? (
-            <a
-              key={network}
-              href={href}
-              className="pixel-chip text-star-white/70 transition-colors hover:text-accent-magenta"
-              aria-label={`${member.name} ${network}`}
-            >
-              {network.toUpperCase()}
-            </a>
-          ) : null,
-        )}
-      </div>
-    </div>
+    </a>
   );
 }
 
@@ -88,15 +82,24 @@ function TeamCard({ member, index }: { member: Member; index: number }) {
  * (independent of the user's scroll), pausing on hover. The edges fade via
  * a mask so cards slide in and out of nothing over the cascade gradient.
  */
+/* Second row starts from a rotated offset so the two rows never line up
+   on the same crew member at the same time. */
+const ROW_TWO_OFFSET = Math.floor(siteConfig.team.length / 2);
+const rowTwo = [
+  ...siteConfig.team.slice(ROW_TWO_OFFSET),
+  ...siteConfig.team.slice(0, ROW_TWO_OFFSET),
+];
+
 export default function MeetTheTeam() {
   return (
-    <section id="team" className="flex min-h-[82dvh] w-full scroll-mt-14 flex-col items-center justify-center overflow-hidden py-20 sm:py-24">
+    <section id="team" className="flex min-h-[82dvh] w-full scroll-mt-14 flex-col items-center justify-center overflow-hidden pt-36 pb-36 sm:pt-48 sm:pb-48">
       <Reveal className="flex w-full flex-col items-center">
         <SectionHeading
           title="MEET THE TEAM"
-          sub="Touchdown. These are the humans who built the descent."
+          sub="These are the humans who made the descent to make HackJam26 possible."
           accent="var(--color-accent-cyan)"
           className="mb-10 px-4 sm:mb-14"
+          subClassName="max-w-xl font-pixel text-xs sm:text-sm"
         />
 
         <div
@@ -105,7 +108,7 @@ export default function MeetTheTeam() {
         >
           {/* Two stacked rows drifting opposite ways; both keep moving
               until the cursor lands on them (pauseOnHover). */}
-          <Marquee pauseOnHover className="[--duration:34s] [--gap:1.5rem] sm:[--gap:2rem]">
+          <Marquee pauseOnHover className="[--duration:30s] [--gap:2rem] sm:[--gap:2.5rem]">
             {siteConfig.team.map((member, i) => (
               <TeamCard key={member.name} member={member} index={i} />
             ))}
@@ -113,10 +116,14 @@ export default function MeetTheTeam() {
           <Marquee
             pauseOnHover
             reverse
-            className="[--duration:28s] [--gap:1.5rem] sm:[--gap:2rem]"
+            className="[--duration:30s] [--gap:2rem] sm:[--gap:2.5rem]"
           >
-            {siteConfig.team.map((member, i) => (
-              <TeamCard key={member.name} member={member} index={i} />
+            {rowTwo.map((member, i) => (
+              <TeamCard
+                key={member.name}
+                member={member}
+                index={(i + ROW_TWO_OFFSET) % siteConfig.team.length}
+              />
             ))}
           </Marquee>
         </div>

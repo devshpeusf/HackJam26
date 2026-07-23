@@ -62,7 +62,7 @@ export const siteConfig = {
   },
   socials: {
     instagram: "https://www.instagram.com/hackabull/?hl=en",
-    discord: "#",
+    discord: "https://discord.com/invite/hxfC5sp6H6",
     linkedin: "https://www.linkedin.com/company/shpe-usf",
   },
 

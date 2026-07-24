@@ -1,6 +1,9 @@
 # macOS
 .DS_Store
 
+# graphify knowledge-graph output (regenerable, not app content)
+graphify-out/
+
 # Logs
 logs
 *.log

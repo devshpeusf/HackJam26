@@ -8,6 +8,8 @@ const LINKS = [
   { label: "ABOUT", href: "#about" },
   { label: "TRACKS", href: "#tracks" },
   { label: "SPONSORS", href: "#sponsors" },
+  { label: "JUDGES", href: "#judges" },
+  { label: "TEAM", href: "#team" },
   { label: "FAQS", href: "#faq" },
 ] as const;
 
@@ -66,7 +68,7 @@ function MlhTrustBadge() {
  * Fixed top bar, HackUSF-style alignment: logo left, everything else in one
  * right-aligned row — section links, IG + Discord, APPLY NOW, and the MLH
  * banner hanging flush from the top edge. Hidden during the intro gate;
- * past it, hides while scrolling down and slides back in on any scroll up.
+ * past it, stays pinned on screen regardless of scroll direction.
  * Collapses to a pixel hamburger + full-screen overlay on small screens.
  */
 export default function Navbar() {
@@ -74,29 +76,30 @@ export default function Navbar() {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("");
+  const lockedTarget = useRef<string | null>(null);
+  const lockTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const reduced = useReducedMotion();
-  const lastY = useRef(0);
+
+  const selectSection = (href: string) => {
+    setActive(href);
+    lockedTarget.current = href;
+    if (lockTimer.current) clearTimeout(lockTimer.current);
+    lockTimer.current = setTimeout(() => {
+      lockedTarget.current = null;
+      lockTimer.current = null;
+    }, 2500);
+  };
 
   useEffect(() => {
-    // Hidden during the intro gate (LoadingScreen's ScrollTrigger ends half a
-    // viewport in). Past it, direction decides visibility: scrolling down
-    // tucks the bar away, scrolling up slides it back in. A small delta
-    // threshold ignores trackpad/scroll-anchoring jitter, and updates are
-    // rAF-batched so at most one state flip lands per frame.
-    lastY.current = window.scrollY;
+    // Hidden only during the intro gate (LoadingScreen's ScrollTrigger ends
+    // half a viewport in); once past it the bar is always visible. Updates
+    // are rAF-batched so at most one state flip lands per frame.
     let raf = 0;
     const update = () => {
       raf = 0;
-      const y = window.scrollY;
-      const delta = y - lastY.current;
-      const pastGate = y >= window.innerHeight * 0.5;
+      const pastGate = window.scrollY >= window.innerHeight * 0.5;
       setSolid(pastGate);
-      if (!pastGate) {
-        setHidden(true);
-      } else if (Math.abs(delta) > 4) {
-        setHidden(delta > 0);
-      }
-      lastY.current = y;
+      setHidden(!pastGate);
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update);
@@ -119,13 +122,24 @@ export default function Navbar() {
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting) setActive(`#${entry.target.id}`);
+          if (!entry.isIntersecting) continue;
+          const href = `#${entry.target.id}`;
+          if (lockedTarget.current && lockedTarget.current !== href) continue;
+          setActive(href);
+          if (lockedTarget.current === href) {
+            lockedTarget.current = null;
+            if (lockTimer.current) clearTimeout(lockTimer.current);
+            lockTimer.current = null;
+          }
         }
       },
       { rootMargin: "-30% 0px -55% 0px" },
     );
     sections.forEach((s) => io.observe(s));
-    return () => io.disconnect();
+    return () => {
+      io.disconnect();
+      if (lockTimer.current) clearTimeout(lockTimer.current);
+    };
   }, []);
 
   // Menu overlay: Escape closes, body scroll locks while open.
@@ -168,10 +182,6 @@ export default function Navbar() {
               src="/logo/hackjam26-triangle.png"
               alt=""
               className="crisp absolute left-0 top-5 h-24 w-auto sm:top-4 sm:h-28"
-              style={{
-                filter:
-                  "drop-shadow(0 0 6px color-mix(in srgb, var(--color-logo-coral) 55%, transparent))",
-              }}
             />
           </a>
 
@@ -181,6 +191,7 @@ export default function Navbar() {
               <a
                 key={l.label}
                 href={l.href}
+                onClick={() => selectSection(l.href)}
                 aria-current={active === l.href ? "true" : undefined}
                 className={`hj-nav-link font-pixel text-[12px] tracking-[0.18em] ${
                   active === l.href
@@ -211,6 +222,8 @@ export default function Navbar() {
             </a>
             <a
               href={siteConfig.registrationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="hj-pixel-btn px-4 py-2 font-pixel text-[12px] tracking-[0.12em]"
             >
               APPLY NOW
@@ -259,7 +272,10 @@ export default function Navbar() {
               <motion.a
                 key={l.label}
                 href={l.href}
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  selectSection(l.href);
+                  setOpen(false);
+                }}
                 initial={{ opacity: 0, y: reduced ? 0 : 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: reduced ? 0 : 0.06 * i, duration: 0.3 }}
@@ -300,6 +316,8 @@ export default function Navbar() {
             </motion.div>
             <motion.a
               href={siteConfig.registrationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setOpen(false)}
               initial={{ opacity: 0, y: reduced ? 0 : 14 }}
               animate={{ opacity: 1, y: 0 }}

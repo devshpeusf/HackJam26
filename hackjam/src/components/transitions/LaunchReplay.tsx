@@ -6,46 +6,54 @@ import { siteConfig } from "@/config/site";
 import {
   PixelExhaustPlume,
   PixelRocket,
-  PixelSmokeCloud,
   ROCKET_ASPECT,
 } from "./RocketSprites";
 
 /* Timeline phase map, in seconds from click. Tune here — every tween
-   below positions itself relative to these. Full white lands ~3.9s. */
+   below positions itself relative to these. Full cloud cover ~4.1s. */
 const PHASE = {
   ignition: 1.1, // plumes flare, rumble
   liftoff: 1.8, // rockets accelerate off the top
   liftoffStagger: 0.12,
-  dust: 1.95, // fuel dust billows from each launch point
-  bloom: 2.9, // white radials swell
-  whiteout: 3.4, // overlay drives to full white
+  cover: 2.2, // cloud wall starts billowing up from below
+  covered: 4.0, // screen fully blanketed — page snaps to top under it
 };
 
-/* Per-rocket smoke-puff layout: small preset variety (offset/size/mirror)
-   so the cluster doesn't look like a single stamped shape before GSAP
-   spreads it during the billow phase. Last two are dropped on small
-   screens (`hidden sm:block`) per the perf budget. */
-const PUFF_LAYOUT: {
-  leftPct: number;
-  width: number;
-  variant: "a" | "b";
-  flip?: boolean;
-}[] = [
-  { leftPct: -60, width: 170, variant: "a" },
-  { leftPct: 20, width: 200, variant: "a", flip: true },
-  { leftPct: -20, width: 130, variant: "b" },
-  { leftPct: 55, width: 120, variant: "b", flip: true },
-  { leftPct: -95, width: 110, variant: "b" },
+/* The cloud wall: 5 rows × 4 columns of oversized cloud sprites (percent
+   positions of the viewport, width in vw). Rows fill bottom-up, spaced far
+   tighter than a sprite's height so they overlap heavily, and a soft fill
+   behind them seals anything left at full cover. */
+const COVER_CLOUDS: { x: number; y: number; w: number; flip?: boolean }[] = [
+  { x: 5, y: 98, w: 62 },
+  { x: 35, y: 103, w: 68, flip: true },
+  { x: 65, y: 97, w: 62 },
+  { x: 95, y: 102, w: 66, flip: true },
+  { x: 18, y: 76, w: 64, flip: true },
+  { x: 48, y: 72, w: 68 },
+  { x: 78, y: 78, w: 62, flip: true },
+  { x: 105, y: 73, w: 60 },
+  { x: 0, y: 52, w: 66 },
+  { x: 30, y: 48, w: 62, flip: true },
+  { x: 60, y: 54, w: 68 },
+  { x: 92, y: 49, w: 64 },
+  { x: 14, y: 28, w: 62, flip: true },
+  { x: 44, y: 24, w: 68 },
+  { x: 74, y: 30, w: 62, flip: true },
+  { x: 102, y: 25, w: 64 },
+  { x: 2, y: 6, w: 64, flip: true },
+  { x: 33, y: 1, w: 68 },
+  { x: 63, y: 8, w: 62, flip: true },
+  { x: 93, y: 3, w: 66 },
 ];
 
 /**
  * The "PLAY AGAIN?" ender: a click-triggered, auto-playing launch that
  * replaces the old scroll-scrubbed transition. The button summons a
  * full-screen overlay — platform rises, rockets ignite and lift off,
- * fuel dust billows, white blooms swell to a full whiteout — then the
- * page snaps back to the top under the white and the overlay fades out
- * over the hero. Escape cancels mid-flight. Reduced motion skips the
- * show and just returns to the top.
+ * then a wall of oversized pixel clouds rises to blanket the
+ * whole screen — the page snaps back to the top underneath, and the wall
+ * parts to the sides to reveal the intro screen. Escape cancels
+ * mid-flight. Reduced motion skips the show and just returns to the top.
  */
 export default function LaunchReplay() {
   const [playing, setPlaying] = useState(false);
@@ -70,14 +78,8 @@ export default function LaunchReplay() {
     const platform = q("[data-launch-platform]");
     const rocketEls = q<HTMLElement>("[data-launch-rocket]");
     const plumeEls = q<HTMLElement>("[data-launch-plume]");
-    const bloomEls = q<HTMLElement>("[data-launch-bloom]");
-    const dustEls = q<HTMLElement>("[data-launch-dust]");
-    const whiteout = q("[data-launch-whiteout]");
-    const puffGroups = dustEls.map((container) =>
-      Array.from(
-        container.querySelectorAll<HTMLElement>("[data-launch-dust-puff]"),
-      ),
-    );
+    const coverEls = q<HTMLElement>("[data-cover-cloud]");
+    const coverFill = q("[data-cover-fill]");
 
     const tl = gsap.timeline({ defaults: { ease: "none" } });
     tlRef.current = tl;
@@ -124,42 +126,55 @@ export default function LaunchReplay() {
         .to(plumeEls[i], { autoAlpha: 0, scaleY: 3, duration: 0.3 }, at + 0.45);
     });
 
-    // Dust billow: the smoke-puff cluster expands outward + upward from
-    // each launch point, then fades as the bloom takes over.
-    puffGroups.forEach((puffs, i) => {
-      puffs.forEach((p, j) => {
-        const at =
-          PHASE.dust + i * PHASE.liftoffStagger + j * 0.05 + rand(0, 0.12);
-        tl.fromTo(
-          p,
-          { x: 0, y: 0, scale: 0.35, autoAlpha: 0 },
-          {
-            x: rand(-1, 1) * rand(30, 140),
-            y: -rand(20, 170),
-            scale: rand(0.9, 1.7),
-            autoAlpha: rand(0.6, 0.95),
-            duration: 0.85,
-            ease: "power1.out",
-          },
-          at,
-        ).to(p, { autoAlpha: 0, duration: 0.4 }, at + 0.85);
-      });
+    // Cloud cover: the wall billows up row by row from the bottom until
+    // the whole viewport is blanketed; the soft fill fades in underneath
+    // to seal the gaps between sprites.
+    coverEls.forEach((el, i) => {
+      const row = Math.floor(i / 4); // 0 = bottom row, rises first
+      const at = PHASE.cover + row * 0.2 + (i % 4) * 0.06 + rand(0, 0.06);
+      tl.fromTo(
+        el,
+        { y: () => window.innerHeight * 0.7 + 400, scale: 0.6, autoAlpha: 0 },
+        { y: 0, scale: 1, autoAlpha: 1, duration: 0.75, ease: "power2.out" },
+        at,
+      );
     });
-
-    // White blooms swell from the launch points.
-    tl.fromTo(
-      bloomEls,
-      { scale: 0.001, autoAlpha: 0 },
-      { scale: 16, autoAlpha: 1, duration: 0.7, ease: "power2.in", stagger: 0.04 },
-      PHASE.bloom,
+    tl.to(
+      coverFill,
+      { autoAlpha: 1, duration: 0.6, ease: "power1.in" },
+      PHASE.covered - 0.8,
     );
 
-    // Whiteout, then snap to the top under the white and fade back in
-    // on the hero. "instant" overrides the global smooth scroll-behavior.
-    tl.to(whiteout, { autoAlpha: 1, duration: 0.5, ease: "power1.in" }, PHASE.whiteout)
-      .call(() => window.scrollTo({ top: 0, behavior: "instant" }))
-      .to(root, { autoAlpha: 0, duration: 0.8, ease: "power1.inOut" }, "+=0.2")
-      .call(() => setPlaying(false));
+    // Fully covered: ditch the platform while it's hidden behind the wall
+    // (so nothing of the pad survives into the reveal), snap to the top
+    // underneath the clouds, hold a beat, then part the wall to the sides
+    // to reveal the intro screen. "instant" overrides the global smooth
+    // scroll-behavior.
+    tl.set(platform, { autoAlpha: 0 }, PHASE.covered);
+    tl.call(
+      () => window.scrollTo({ top: 0, behavior: "instant" }),
+      [],
+      PHASE.covered,
+    ).to(
+      coverFill,
+      { autoAlpha: 0, duration: 0.6, ease: "power1.out" },
+      PHASE.covered + 0.4,
+    );
+    coverEls.forEach((el, i) => {
+      const dir = COVER_CLOUDS[i].x < 50 ? -1 : 1;
+      tl.to(
+        el,
+        {
+          x: () => dir * window.innerWidth * 1.35,
+          duration: 1,
+          ease: "power2.in",
+        },
+        PHASE.covered + 0.4 + rand(0, 0.18),
+      );
+    });
+    tl.to(root, { autoAlpha: 0, duration: 0.3 }, PHASE.covered + 1.6).call(() =>
+      setPlaying(false),
+    );
 
     return () => {
       tlRef.current = null;
@@ -240,39 +255,6 @@ export default function LaunchReplay() {
             </div>
           </div>
 
-          {/* Launch points: smoke-puff clusters stay anchored to the pad
-              while rockets fly; each puff is animated independently above. */}
-          {rockets.map((r, i) => (
-            <div
-              key={i}
-              data-launch-dust
-              className="absolute bottom-[7%] z-10 h-0 w-0"
-              style={{ left: `${r.xPercent}%` }}
-            >
-              {PUFF_LAYOUT.map((puff, j) => (
-                <div
-                  key={j}
-                  data-launch-dust-puff
-                  className={
-                    j >= 3
-                      ? "absolute bottom-0 hidden opacity-0 will-change-transform sm:block"
-                      : "absolute bottom-0 opacity-0 will-change-transform"
-                  }
-                  style={{
-                    left: puff.leftPct,
-                    transform: "translateX(-50%)",
-                  }}
-                >
-                  <PixelSmokeCloud
-                    width={puff.width}
-                    variant={puff.variant}
-                    flip={puff.flip}
-                  />
-                </div>
-              ))}
-            </div>
-          ))}
-
           {/* Rockets + exhaust plumes (plume rides with its rocket) */}
           {rockets.map((r, i) => (
             <div
@@ -312,29 +294,40 @@ export default function LaunchReplay() {
             </div>
           ))}
 
-          {/* White blooms — one per launch point, in front of the rockets */}
-          {rockets.map((r, i) => (
+          {/* Cloud wall — billows up to blanket the screen; the reset hides
+              behind it, then it parts to the sides over the intro screen */}
+          <div className="absolute inset-0 z-40 overflow-hidden">
             <div
-              key={i}
-              data-launch-bloom
-              className="absolute z-30 h-44 w-44 rounded-full opacity-0"
-              style={{
-                left: `${r.xPercent}%`,
-                bottom: "2%",
-                transform: "translate(-50%, 30%)",
-                willChange: "transform",
-                background:
-                  "radial-gradient(circle, var(--color-star-white) 0%, color-mix(in srgb, var(--color-star-white) 65%, transparent) 45%, transparent 72%)",
-              }}
+              data-cover-fill
+              className="absolute inset-0 opacity-0"
+              style={{ background: "#ffeef6" }}
             />
-          ))}
-
-          {/* Full whiteout — the top layer the reset hides behind */}
-          <div
-            data-launch-whiteout
-            className="absolute inset-0 z-40 opacity-0"
-            style={{ background: "var(--color-star-white)" }}
-          />
+            {COVER_CLOUDS.map((c, i) => (
+              <div
+                key={i}
+                data-cover-cloud
+                className="absolute opacity-0 will-change-transform"
+                style={{
+                  left: `${c.x}%`,
+                  top: `${c.y}%`,
+                  width: `${c.w}vw`,
+                  marginLeft: `${-c.w / 2}vw`,
+                  marginTop: `${-c.w / 4.2}vw`,
+                  // Bottom row stacks frontmost; each higher row slides in
+                  // behind the one below it, so the wall reads as filling
+                  // up from the ground.
+                  zIndex: 10 - Math.floor(i / 4),
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/clouds/pixel-cloud.png"
+                  alt=""
+                  className={`crisp w-full ${c.flip ? "-scale-x-100" : ""}`}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </>

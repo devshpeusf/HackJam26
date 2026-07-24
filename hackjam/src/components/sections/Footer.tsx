@@ -34,6 +34,8 @@ export default function Footer() {
         </a>
         <a
           href={siteConfig.socials.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-star-white/70 underline-offset-4 transition-colors hover:text-accent-cyan hover:underline"
         >
           Instagram
@@ -46,6 +48,8 @@ export default function Footer() {
         </a>
         <a
           href={siteConfig.socials.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-star-white/70 underline-offset-4 transition-colors hover:text-accent-cyan hover:underline"
         >
           LinkedIn

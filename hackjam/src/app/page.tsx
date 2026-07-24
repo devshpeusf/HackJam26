@@ -6,7 +6,7 @@ import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import WorldsSection from "@/components/WorldsSection";
 import RocketDescent from "@/components/sections/RocketDescent";
-import Sponsors from "@/components/sections/Sponsors";
+import Judges from "@/components/sections/Judges";
 import MeetTheTeam from "@/components/sections/MeetTheTeam";
 import FAQ from "@/components/sections/FAQ";
 import Footer from "@/components/sections/Footer";
@@ -25,7 +25,7 @@ export default function Home() {
         <About />
         <WorldsSection />
         <RocketDescent />
-        <Sponsors />
+        <Judges />
         <MeetTheTeam />
         <FAQ />
         <Footer />

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { siteConfig } from "@/config/site";
+import MlhTrustBadge from "@/components/MlhTrustBadge";
 
 const LINKS = [
   { label: "ABOUT", href: "#about" },
@@ -43,27 +44,6 @@ function DiscordIcon({ className }: { className?: string }) {
   );
 }
 
-/** Official MLH 2027-season trust badge — hangs flush from the top edge.
- *  Rendered inside the bar so it slides in/out with it. */
-function MlhTrustBadge() {
-  return (
-    <a
-      id="mlh-trust-badge"
-      href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block w-[72px] shrink-0 self-start sm:w-[90px]"
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="https://logged-assets.s3.amazonaws.com/trust-badge/2027/mlh-trust-badge-2027-white.svg"
-        alt="Major League Hacking 2026 Hackathon Season"
-        className="w-full"
-      />
-    </a>
-  );
-}
-
 /**
  * Fixed top bar, HackUSF-style alignment: logo left, everything else in one
  * right-aligned row — section links, IG + Discord, APPLY NOW, and the MLH
@@ -91,25 +71,22 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    // Hidden only during the intro gate (LoadingScreen's ScrollTrigger ends
-    // half a viewport in); once past it the bar is always visible. Updates
-    // are rAF-batched so at most one state flip lands per frame.
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const pastGate = window.scrollY >= window.innerHeight * 0.5;
-      setSolid(pastGate);
-      setHidden(!pastGate);
+    // The intro gate owns the reveal — this used to key off scroll position,
+    // which only worked because the old LoadingScreen padded the page with a
+    // 150vh runway. Once the gate hands off, the bar stays visible and solid
+    // for the rest of the page, matching the old post-runway appearance.
+    const reveal = () => {
+      setHidden(false);
+      setSolid(true);
     };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
+    // No attribute at all means no gate is mounted — don't hide forever.
+    const state = document.documentElement.dataset.intro;
+    if (state === undefined || state === "done") {
+      reveal();
+      return;
+    }
+    window.addEventListener("hj:intro-done", reveal);
+    return () => window.removeEventListener("hj:intro-done", reveal);
   }, []);
 
   // Scroll spy: the section crossing a band around the upper third of the
@@ -228,7 +205,7 @@ export default function Navbar() {
             >
               APPLY NOW
             </a>
-            <MlhTrustBadge />
+            <MlhTrustBadge id="mlh-trust-badge" />
           </div>
 
           {/* hamburger (mobile) */}

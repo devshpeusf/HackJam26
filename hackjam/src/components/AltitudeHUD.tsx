@@ -60,7 +60,7 @@ export default function AltitudeHUD() {
   return (
     <div
       aria-hidden
-      className="pixel-panel fixed bottom-5 left-5 z-40 flex flex-col gap-2 px-4 py-3 max-sm:hidden"
+      className="hj-chrome pixel-panel fixed bottom-5 left-5 z-40 flex flex-col gap-2 px-4 py-3 max-sm:hidden"
     >
       <div className="flex items-baseline gap-2">
         <span className="font-pixel text-[8px] tracking-[0.2em] text-accent-cyan">

@@ -123,7 +123,7 @@
   }
   body {
     /* No overflow-x here: it would make body a scroll container and break
-       every position:sticky set-piece (RocketDescent, LoadingScreen).
+       every position:sticky set-piece (RocketDescent, WorldsSection).
        Horizontal clipping is handled by html and <main> overflow-x-clip. */
     /* Base anchor behind the cascade — prevents flash before paint.
        The scroll-driven cascade itself lives in CascadeBackground.tsx. */
@@ -133,6 +133,9 @@
   }
   html {
     overflow-x: hidden;
+    /* The intro gate locks html; without a reserved gutter the scrollbar
+       vanishing/returning jolts the layout exactly as the site is revealed. */
+    scrollbar-gutter: stable;
   }
   /* Navbar anchor links glide to their section (unless motion is reduced) */
   @media (prefers-reduced-motion: no-preference) {
@@ -607,6 +610,55 @@
     opacity: 0;
   }
 }
+/* === Intro gate (components/intro/IntroGate.tsx) === */
+
+/* Lock the real scroller. html is the propagating element here — locking body
+   would make it a scroll container (breaking every position:sticky set-piece)
+   and wouldn't even lock, since overflow-x above stops propagation. */
+html[data-intro="active"],
+html[data-intro="launching"] {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* The site is hidden until the flight starts, then revealed through the
+   cabinet's alpha-cut screen hole. Prerendered markup means no FOUC. */
+html[data-intro="active"] #site-root {
+  visibility: hidden;
+}
+
+/* Chrome stays out of the way until the gate hands off */
+html[data-intro="active"] .hj-chrome,
+html[data-intro="launching"] .hj-chrome {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Screen content is sized in container units so it scales with the cabinet
+   rather than the viewport — stays legible when the cabinet shrinks. */
+.hj-screen {
+  container-type: size;
+}
+
+/* CRT: scanlines + phosphor vignette over the screen */
+.hj-crt {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.32) 0px,
+    rgba(0, 0, 0, 0.32) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  box-shadow:
+    inset 0 0 6cqw color-mix(in srgb, var(--color-accent-cyan) 10%, transparent),
+    inset 0 0 14cqw rgba(0, 0, 0, 0.55);
+  opacity: 0.55;
+}
+
+.hj-press-blink {
+  animation: hj-cursor-blink 1.1s steps(1) infinite;
+}
+
 /* Honor prefers-reduced-motion: freeze all idle loops (spec §8) */
 @media (prefers-reduced-motion: reduce) {
   *,

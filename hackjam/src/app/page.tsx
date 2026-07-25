@@ -1,4 +1,4 @@
-import LoadingScreen from "@/components/LoadingScreen";
+import IntroGate from "@/components/intro/IntroGate";
 import AltitudeHUD from "@/components/AltitudeHUD";
 import Navbar from "@/components/Navbar";
 import CascadeBackground from "@/components/background/CascadeBackground";
@@ -17,20 +17,24 @@ import Footer from "@/components/sections/Footer";
 export default function Home() {
   return (
     <>
-      <LoadingScreen />
-      <Navbar />
-      <main id="top" className="relative w-full max-w-full overflow-x-clip">
-        <CascadeBackground />
-        <Hero />
-        <About />
-        <WorldsSection />
-        <RocketDescent />
-        <Judges />
-        <MeetTheTeam />
-        <FAQ />
-        <Footer />
-        <AltitudeHUD />
-      </main>
+      {/* One transformable root so the whole site can fly out of the cabinet
+          screen as a unit. IntroGate sits after it and layers by z-index. */}
+      <div id="site-root">
+        <Navbar />
+        <main id="top" className="relative w-full max-w-full overflow-x-clip">
+          <CascadeBackground />
+          <Hero />
+          <About />
+          <WorldsSection />
+          <RocketDescent />
+          <Judges />
+          <MeetTheTeam />
+          <FAQ />
+          <Footer />
+          <AltitudeHUD />
+        </main>
+      </div>
+      <IntroGate />
     </>
   );
 }

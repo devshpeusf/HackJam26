@@ -198,7 +198,7 @@ export const siteConfig = {
       role: "Lead",
       team: "Web Development",
       photo: "/team/ian-lopez.jpeg",
-      linkedin: LINKEDIN_PLACEHOLDER,
+      linkedin: "https://www.linkedin.com/in/ian-lopez-547806311",
     },
     {
       name: "Gabriel Marchiori de Almeida",

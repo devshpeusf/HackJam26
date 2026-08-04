@@ -16,7 +16,7 @@ export default function Footer() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/logo/shpe-usf-horiz-ko.png"
+            src="/logo/shpe-usf-horiz-ko.webp"
             alt="SHPE — University of South Florida"
             className="w-[260px] max-w-[72vw]"
           />

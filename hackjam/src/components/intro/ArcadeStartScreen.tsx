@@ -44,7 +44,7 @@ export default function ArcadeStartScreen({
             It already carries '26, so no year line is needed here. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/gifs/HackJam26_black_levitate.gif"
+          src="/gifs/HackJam26_black_levitate.webp"
           alt="HackJam"
           className="crisp w-[64cqw] max-w-full"
         />

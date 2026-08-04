@@ -98,7 +98,7 @@ export default function About() {
                   the space so the orbit rings never collapse before load. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/gifs/Earth.gif"
+                src="/gifs/Earth.webp"
                 alt=""
                 width={120}
                 height={120}
@@ -109,7 +109,7 @@ export default function About() {
               {/* mascot riding the planet — flame scraping the top edge */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/mascot/hackjam-mascot-levitate.gif"
+                src="/mascot/hackjam-mascot-levitate.webp"
                 alt=""
                 width={520}
                 height={660}

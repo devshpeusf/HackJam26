@@ -1,7 +1,7 @@
 /**
  * Arcade cabinet artwork geometry.
  *
- * Measured off public/intro/arcade-cabinet.png (1024x781): the screen is
+ * Measured off public/intro/arcade-cabinet.webp (1024x781): the screen is
  * already an alpha-cut hole at x 294..727, y 148..522 (434x375), 98.8% of its
  * bounding box, so a plain rect tracks it accurately.
  *
@@ -35,8 +35,8 @@ export const SCREEN_FILL = 0.88;
 /** Width multiplier (relative to the container) that achieves SCREEN_FILL. */
 export const WIDTH_FOR_SCREEN_FILL = SCREEN_FILL / SCREEN_RECT.width;
 
-export const CABINET_SRC = "/intro/arcade-cabinet.png";
-export const BACKDROP_SRC = "/intro/intro-backdrop.png";
+export const CABINET_SRC = "/intro/arcade-cabinet.webp";
+export const BACKDROP_SRC = "/intro/intro-backdrop.webp";
 
 /** Both layers are preloaded before the gate becomes interactive. */
 export const INTRO_IMAGES = [BACKDROP_SRC, CABINET_SRC] as const;

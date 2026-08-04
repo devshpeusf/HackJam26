@@ -53,7 +53,7 @@ export default function Hero() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           data-hero-logo
-          src="/gifs/HackJam26_black_levitate.gif"
+          src="/gifs/HackJam26_black_levitate.webp"
           alt={siteConfig.name}
           className="crisp w-[min(92vw,64rem)] max-w-full"
           decoding="async"

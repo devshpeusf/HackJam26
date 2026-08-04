@@ -114,7 +114,7 @@ export default function AtmosphereClouds() {
               )}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/clouds/pixel-cloud.png"
+                src="/clouds/pixel-cloud.webp"
                 alt=""
                 aria-hidden
                 className="crisp relative z-10 w-full"

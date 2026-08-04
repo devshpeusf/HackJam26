@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState, useEffect } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 
 const stats = [
@@ -8,67 +8,6 @@ const stats = [
   { value: "FREE", label: "TO ATTEND" },
   { value: "1–3", label: "PER TEAM" },
 ];
-
-/**
- * Lazy image: renders a blank placeholder until the container enters the
- * viewport (300 px margin), then swaps in the real src. This keeps
- * Earth.gif (144 KB) and the mascot GIF (1.9 MB) out of the initial load.
- * The design is identical — same className/style, just deferred.
- */
-function LazyImg({
-  src,
-  alt,
-  className,
-  style,
-  wrapperClassName,
-  wrapperStyle,
-  children,
-}: {
-  src: string;
-  alt: string;
-  className?: string;
-  style?: React.CSSProperties;
-  /** Optional wrapper div for children (orbit rings etc.) */
-  wrapperClassName?: string;
-  wrapperStyle?: React.CSSProperties;
-  children?: React.ReactNode;
-}) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setLoaded(true);
-          io.disconnect();
-        }
-      },
-      { rootMargin: "300px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  if (wrapperClassName !== undefined || children !== undefined) {
-    return (
-      <div ref={wrapRef} className={wrapperClassName} style={wrapperStyle}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        {loaded && <img src={src} alt={alt} className={className} style={style} />}
-        {children}
-      </div>
-    );
-  }
-
-  return (
-    <div ref={wrapRef} style={{ display: "contents" }}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      {loaded && <img src={src} alt={alt} className={className} style={style} />}
-    </div>
-  );
-}
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -137,12 +76,13 @@ export default function About() {
             one tight, symmetric composition */}
         <div className="relative flex min-h-72 items-start justify-center px-6 pb-10 pt-32 sm:pt-40 lg:-translate-x-16 lg:justify-end lg:px-0 xl:-translate-x-24">
           <div data-about-illustration>
-            {/* Lazy-loaded planet + orbit rings wrapper */}
             <div
               className="relative z-10 w-56 sm:w-72"
               style={{ animation: "hj-float 6s ease-in-out infinite" }}
             >
-              {/* orbit rings */}
+              {/* orbit rings — inset + negative margin keeps them concentric
+                  with the planet (and floating with it) without transforms,
+                  which the pulse animation would otherwise clobber */}
               <div
                 aria-hidden
                 className="absolute inset-0 -m-12 rounded-full border border-accent-cyan/15"
@@ -152,20 +92,29 @@ export default function About() {
                 aria-hidden
                 className="absolute inset-0 -m-2 rounded-full border border-nebula-core/18"
               />
-
-              {/* Earth GIF — lazy loaded */}
+              {/* Deferred by the browser, not JS: an IntersectionObserver
+                  wrapper here would need a layout box, and any box we could
+                  give it would disturb this composition. width/height reserve
+                  the space so the orbit rings never collapse before load. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <LazyImg
+              <img
                 src="/gifs/Earth.gif"
                 alt=""
+                width={120}
+                height={120}
+                loading="lazy"
+                decoding="async"
                 className="crisp w-full"
               />
-
-              {/* Mascot GIF — lazy loaded, same position as original */}
+              {/* mascot riding the planet — flame scraping the top edge */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <LazyImg
+              <img
                 src="/mascot/hackjam-mascot-levitate.gif"
                 alt=""
+                width={520}
+                height={660}
+                loading="lazy"
+                decoding="async"
                 className="crisp absolute -top-28 left-1/2 z-10 w-24 -translate-x-1/2 sm:-top-38 sm:w-32"
                 style={{ animation: "hj-float 4s ease-in-out 0.8s infinite" }}
               />

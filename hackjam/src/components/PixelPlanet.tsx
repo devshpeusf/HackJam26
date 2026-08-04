@@ -41,7 +41,7 @@ export default function PixelPlanet({
     comp.width = size;
     comp.height = size;
     comp.style.cssText =
-      "width:100%;height:100%;border-radius:50%;display:block;image-rendering:pixelated";
+      "width:100%;height:100%;border-radius:50%;display:block;image-rendering:pixelated;will-change:transform";
     wrap.appendChild(comp);
 
     const planet = new Planet(glCanvases, comp, def.layers, reduced ? 0 : spin);
@@ -80,6 +80,8 @@ export default function PixelPlanet({
       io.disconnect();
       cancelAnimationFrame(raf);
       planet.dispose();
+      // Remove will-change before destroying to release the GPU layer
+      comp.style.willChange = "auto";
       wrap.replaceChildren();
     };
   }, [index, size, spin]);

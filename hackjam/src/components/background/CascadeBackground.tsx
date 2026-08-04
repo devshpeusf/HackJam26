@@ -37,13 +37,11 @@ type Meteor = {
   y: number; // vh
   dir: 1 | -1; // 1 = falls down-right, -1 = falls down-left
   delay: number;
-  duration: number; // long: the streak itself only uses the first 15%
+  duration: number;
   color: string;
 };
 
-/* Six meteors on staggered 14–20s cycles, each visible for the first ~15%
-   of its cycle → one crosses the screen roughly every 3 seconds. They
-   alternate direction; start positions keep the whole flight on-screen. */
+/* Six meteors on staggered 14–20s cycles */
 function makeMeteors(seed: number, count: number): Meteor[] {
   const rand = mulberry32(seed);
   const colors = ["#f4f1fb", "#ffd9a0", "#ffb1d9"];
@@ -53,7 +51,6 @@ function makeMeteors(seed: number, count: number): Meteor[] {
       x: dir === -1 ? 45 + rand() * 65 : -10 + rand() * 65,
       y: -10 + rand() * 45,
       dir,
-      // Spread the launch times evenly so streaks never bunch up.
       delay: i * 3 + rand() * 2,
       duration: 14 + rand() * 6,
       color: colors[Math.floor(rand() * colors.length)],
@@ -61,8 +58,7 @@ function makeMeteors(seed: number, count: number): Meteor[] {
   });
 }
 
-/* Pixel-art trail: axis-aligned squares strung up the 45° diagonal behind
-   the head, shrinking and fading — the deep-fold shooting-star look. */
+/* Pixel-art trail: axis-aligned squares strung up the 45° diagonal */
 const TRAIL = [
   { off: 9, size: 4, alpha: 0.9 },
   { off: 16, size: 3, alpha: 0.7 },
@@ -95,7 +91,7 @@ function MeteorLayer({ meteors }: { meteors: Meteor[] }) {
               boxShadow: `0 0 8px 1px color-mix(in srgb, ${m.color} 80%, transparent)`,
             }}
           />
-          {/* trail extends up and opposite the travel direction */}
+          {/* trail */}
           {TRAIL.map((t, j) => (
             <span
               key={j}
@@ -148,21 +144,27 @@ function StarLayer({
  * The continuous cascade (spec §5): one tall vertical gradient spanning the
  * whole page (space → nebula → sky → sunset → grass), plus fixed parallax
  * star layers and a faint grid overlay. Rendered once behind all sections.
+ *
+ * Performance notes vs. original:
+ *  - far:  70 → 50 stars   (-20 DOM nodes, visually indistinguishable at 2px)
+ *  - mid:  26 → 20 sparkles (-6 nodes)
+ *  - near: 14 →  9 stars   (-5 nodes)
+ *  - pink: 42 → 28 stars   (-14 nodes)
+ *  - pinkSparkle: 9 → 7    (-2 nodes)
+ *  - meteors: 6 → 6 (unchanged — they are essential to the aesthetic)
+ *  Total DOM saving: ~47 fewer animated <span> elements
  */
 export default function CascadeBackground() {
   const parallaxRef = useRef<HTMLDivElement>(null);
 
-  // Star colors per spec: white, warm gold, pink — no cyan in the starfield.
   const layers = useMemo(
     () => ({
-      far: makeStars(1, 70, ["#f4f1fb"], false),
-      mid: makeStars(2, 26, ["#f4f1fb", "#ffd9a0"], true),
-      near: makeStars(3, 14, ["#ffb1d9", "#ffd9a0"], false),
+      far: makeStars(1, 50, ["#f4f1fb"], false),          // was 70
+      mid: makeStars(2, 20, ["#f4f1fb", "#ffd9a0"], true), // was 26
+      near: makeStars(3, 9, ["#ffb1d9", "#ffd9a0"], false), // was 14
       meteors: makeMeteors(4, 6),
-      // Hero constellation: register-button magenta, faded out by the time
-      // the descent leaves the hero (see the fade tween below).
-      pink: makeStars(7, 42, ["#ff2e97", "#ff2e97", "#ffb1d9", "#f4f1fb"], false),
-      pinkSparkle: makeStars(8, 9, ["#ff2e97", "#ffb1d9"], true),
+      pink: makeStars(7, 28, ["#ff2e97", "#ff2e97", "#ffb1d9", "#f4f1fb"], false), // was 42
+      pinkSparkle: makeStars(8, 7, ["#ff2e97", "#ffb1d9"], true), // was 9
     }),
     [],
   );
@@ -171,9 +173,6 @@ export default function CascadeBackground() {
     const root = parallaxRef.current;
     if (!root) return;
 
-    // The pink hero constellation dissolves within the first stretch of the
-    // descent, in both motion modes: full mode drifts + fades with scrub lag,
-    // reduced mode keeps only the opacity fade, tracking scroll exactly.
     const pinkFade = (drift: boolean) =>
       gsap.to(root.querySelector("[data-stars=pink]"), {
         ...(drift ? { yPercent: -24 } : {}),
@@ -188,7 +187,6 @@ export default function CascadeBackground() {
 
     const mm = gsap.matchMedia();
     mm.add("(prefers-reduced-motion: no-preference)", () => {
-      // Deeper layers scroll slower — depth through speed difference.
       const speeds: [string, number][] = [
         ["[data-stars=far]", -8],
         ["[data-stars=mid]", -18],
@@ -275,7 +273,7 @@ export default function CascadeBackground() {
         aria-hidden
         className="pointer-events-none fixed inset-0 -z-10"
       >
-        {/* Faint violet grid — the digital/arcade whisper (spec §5c) */}
+        {/* Faint violet grid */}
         <div
           className="absolute inset-0 opacity-[0.05]"
           style={{

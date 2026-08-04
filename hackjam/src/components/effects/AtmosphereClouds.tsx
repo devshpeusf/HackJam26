@@ -97,6 +97,8 @@ export default function AtmosphereClouds() {
                       src={sponsor.logo}
                       alt={sponsor.name}
                       className="crisp w-[clamp(96px,10vw,180px)] object-contain"
+                      loading="lazy"
+                      decoding="async"
                     />
                   ) : (
                     // Generic placeholder until real logos land — every
@@ -116,6 +118,8 @@ export default function AtmosphereClouds() {
                 alt=""
                 aria-hidden
                 className="crisp relative z-10 w-full"
+                loading="lazy"
+                decoding="async"
                 style={c.flip ? { transform: "scaleX(-1)" } : undefined}
               />
             </div>

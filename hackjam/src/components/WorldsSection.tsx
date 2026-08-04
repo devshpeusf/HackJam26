@@ -68,7 +68,7 @@ function PlanetPod({
           style={{ animation: "hj-ring-pulse 3s ease-in-out infinite" }}
         />
         <div className="h-full w-full transition-transform duration-500 group-hover:scale-105">
-          <PixelPlanet index={world.planetIndex} size={800} />
+          <PixelPlanet index={world.planetIndex} size={400} />
         </div>
         {/* track label + faded watermark, same line, + hint on the inner
             (visible) side */}

@@ -46,12 +46,20 @@ export default function Hero() {
   return (
     <section ref={sectionRef} className="relative flex min-h-[100dvh] flex-col items-center justify-start px-4 pb-20 pt-24 text-center sm:pt-28">
       <div className="flex flex-col items-center gap-8">
+        {/*
+          fetchPriority="high" + loading="eager" tells the browser to start
+          fetching this GIF immediately (it's the LCP element — above the fold).
+          decoding="async" prevents it from blocking the main thread.
+        */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           data-hero-logo
           src="/gifs/HackJam26_black_levitate.gif"
           alt={siteConfig.name}
           className="crisp w-[min(92vw,64rem)] max-w-full"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
         />
 
         <p data-hero-detail className="font-pixel text-[12px] leading-relaxed text-nebula-core sm:text-[16px]">

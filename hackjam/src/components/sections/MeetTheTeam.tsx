@@ -85,14 +85,6 @@ function TeamCard({ member, index }: { member: Member; index: number }) {
  * (independent of the user's scroll), pausing on hover. The edges fade via
  * a mask so cards slide in and out of nothing over the cascade gradient.
  */
-/* Second row starts from a rotated offset so the two rows never line up
-   on the same crew member at the same time. */
-const ROW_TWO_OFFSET = Math.floor(siteConfig.team.length / 2);
-const rowTwo = [
-  ...siteConfig.team.slice(ROW_TWO_OFFSET),
-  ...siteConfig.team.slice(0, ROW_TWO_OFFSET),
-];
-
 export default function MeetTheTeam() {
   return (
     <section id="team" className="flex min-h-[82dvh] w-full scroll-mt-14 flex-col items-center justify-center overflow-hidden pt-36 pb-36 sm:pt-48 sm:pb-48">
@@ -109,24 +101,11 @@ export default function MeetTheTeam() {
           data-reveal
           className="flex w-full flex-col gap-5 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] sm:gap-7"
         >
-          {/* Two stacked rows drifting opposite ways; both keep moving
-              until the cursor lands on them (pauseOnHover). */}
+          {/* One row, drifting on its own until the cursor lands on it
+              (pauseOnHover). */}
           <Marquee pauseOnHover className="[--duration:30s] [--gap:2rem] sm:[--gap:2.5rem]">
             {siteConfig.team.map((member, i) => (
               <TeamCard key={member.name} member={member} index={i} />
-            ))}
-          </Marquee>
-          <Marquee
-            pauseOnHover
-            reverse
-            className="[--duration:30s] [--gap:2rem] sm:[--gap:2.5rem]"
-          >
-            {rowTwo.map((member, i) => (
-              <TeamCard
-                key={member.name}
-                member={member}
-                index={(i + ROW_TWO_OFFSET) % siteConfig.team.length}
-              />
             ))}
           </Marquee>
         </div>

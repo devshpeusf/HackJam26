@@ -321,7 +321,7 @@ export default function LaunchReplay() {
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/clouds/pixel-cloud.png"
+                  src="/clouds/pixel-cloud.webp"
                   alt=""
                   className={`crisp w-full ${c.flip ? "-scale-x-100" : ""}`}
                 />

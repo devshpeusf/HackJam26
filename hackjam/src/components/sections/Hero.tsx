@@ -46,12 +46,18 @@ export default function Hero() {
   return (
     <section ref={sectionRef} className="relative flex min-h-[100dvh] flex-col items-center justify-start px-4 pb-20 pt-24 text-center sm:pt-28">
       <div className="flex flex-col items-center gap-8">
+        {/* This is the LCP element. fetchPriority raises it above the
+            browser's default guess for a late-discovered image; decoding
+            keeps the decode off the main thread. (loading="eager" would be
+            redundant — it is already the default.) */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           data-hero-logo
-          src="/gifs/HackJam26_black_levitate.gif"
+          src="/gifs/HackJam26_black_levitate.webp"
           alt={siteConfig.name}
           className="crisp w-[min(92vw,64rem)] max-w-full"
+          decoding="async"
+          fetchPriority="high"
         />
 
         <p data-hero-detail className="font-pixel text-[12px] leading-relaxed text-nebula-core sm:text-[16px]">

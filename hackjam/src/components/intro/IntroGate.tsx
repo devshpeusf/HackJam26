@@ -287,6 +287,7 @@ export default function IntroGate() {
           alt=""
           onError={hideBroken}
           className="absolute inset-0 h-full w-full object-cover"
+          decoding="async"
         />
       </div>
 
@@ -332,6 +333,7 @@ export default function IntroGate() {
             aria-hidden
             onError={hideBroken}
             className="absolute inset-0 block h-full w-full"
+            decoding="async"
           />
 
           <div

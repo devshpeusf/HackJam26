@@ -80,25 +80,41 @@ export default function About() {
               className="relative z-10 w-56 sm:w-72"
               style={{ animation: "hj-float 6s ease-in-out infinite" }}
             >
-            {/* orbit rings — inset + negative margin keeps them concentric
-                with the planet (and floating with it) without transforms,
-                which the pulse animation would otherwise clobber */}
-            <div
-              aria-hidden
-              className="absolute inset-0 -m-12 rounded-full border border-accent-cyan/15"
-              style={{ animation: "hj-ring-pulse 4s ease-in-out infinite" }}
-            />
-            <div
-              aria-hidden
-              className="absolute inset-0 -m-2 rounded-full border border-nebula-core/18"
-            />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/gifs/Earth.gif" alt="" className="crisp w-full" />
-            {/* mascot riding the planet — flame scraping the top edge */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+              {/* orbit rings — inset + negative margin keeps them concentric
+                  with the planet (and floating with it) without transforms,
+                  which the pulse animation would otherwise clobber */}
+              <div
+                aria-hidden
+                className="absolute inset-0 -m-12 rounded-full border border-accent-cyan/15"
+                style={{ animation: "hj-ring-pulse 4s ease-in-out infinite" }}
+              />
+              <div
+                aria-hidden
+                className="absolute inset-0 -m-2 rounded-full border border-nebula-core/18"
+              />
+              {/* Deferred by the browser, not JS: an IntersectionObserver
+                  wrapper here would need a layout box, and any box we could
+                  give it would disturb this composition. width/height reserve
+                  the space so the orbit rings never collapse before load. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/mascot/hackjam-mascot-levitate.gif"
+                src="/gifs/Earth.webp"
                 alt=""
+                width={120}
+                height={120}
+                loading="lazy"
+                decoding="async"
+                className="crisp w-full"
+              />
+              {/* mascot riding the planet — flame scraping the top edge */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/mascot/hackjam-mascot-levitate.webp"
+                alt=""
+                width={520}
+                height={660}
+                loading="lazy"
+                decoding="async"
                 className="crisp absolute -top-28 left-1/2 z-10 w-24 -translate-x-1/2 sm:-top-38 sm:w-32"
                 style={{ animation: "hj-float 4s ease-in-out 0.8s infinite" }}
               />

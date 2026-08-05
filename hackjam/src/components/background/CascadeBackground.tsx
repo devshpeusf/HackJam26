@@ -148,6 +148,15 @@ function StarLayer({
  * The continuous cascade (spec §5): one tall vertical gradient spanning the
  * whole page (space → nebula → sky → sunset → grass), plus fixed parallax
  * star layers and a faint grid overlay. Rendered once behind all sections.
+ *
+ * Performance notes vs. original:
+ *  - far:  70 → 50 stars   (-20 DOM nodes, visually indistinguishable at 2px)
+ *  - mid:  26 → 20 sparkles (-6 nodes)
+ *  - near: 14 →  9 stars   (-5 nodes)
+ *  - pink: 42 → 28 stars   (-14 nodes)
+ *  - pinkSparkle: 9 → 7    (-2 nodes)
+ *  - meteors: 6 → 6 (unchanged — they are essential to the aesthetic)
+ *  Total DOM saving: ~47 fewer animated <span> elements
  */
 export default function CascadeBackground() {
   const parallaxRef = useRef<HTMLDivElement>(null);
@@ -155,14 +164,14 @@ export default function CascadeBackground() {
   // Star colors per spec: white, warm gold, pink — no cyan in the starfield.
   const layers = useMemo(
     () => ({
-      far: makeStars(1, 70, ["#f4f1fb"], false),
-      mid: makeStars(2, 26, ["#f4f1fb", "#ffd9a0"], true),
-      near: makeStars(3, 14, ["#ffb1d9", "#ffd9a0"], false),
+      far: makeStars(1, 50, ["#f4f1fb"], false),          // was 70
+      mid: makeStars(2, 20, ["#f4f1fb", "#ffd9a0"], true), // was 26
+      near: makeStars(3, 9, ["#ffb1d9", "#ffd9a0"], false), // was 14
       meteors: makeMeteors(4, 6),
       // Hero constellation: register-button magenta, faded out by the time
       // the descent leaves the hero (see the fade tween below).
-      pink: makeStars(7, 42, ["#ff2e97", "#ff2e97", "#ffb1d9", "#f4f1fb"], false),
-      pinkSparkle: makeStars(8, 9, ["#ff2e97", "#ffb1d9"], true),
+      pink: makeStars(7, 28, ["#ff2e97", "#ff2e97", "#ffb1d9", "#f4f1fb"], false), // was 42
+      pinkSparkle: makeStars(8, 7, ["#ff2e97", "#ffb1d9"], true), // was 9
     }),
     [],
   );

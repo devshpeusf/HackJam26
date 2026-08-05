@@ -156,7 +156,7 @@ export default function Navbar() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/logo/hackjam26-triangle.png"
+              src="/logo/hackjam26-triangle.webp"
               alt=""
               className="crisp absolute left-0 top-5 h-24 w-auto sm:top-4 sm:h-28"
             />

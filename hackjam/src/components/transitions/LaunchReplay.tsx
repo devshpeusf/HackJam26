@@ -23,6 +23,16 @@ const PHASE = {
    positions of the viewport, width in vw). Rows fill bottom-up, spaced far
    tighter than a sprite's height so they overlap heavily, and a soft fill
    behind them seals anything left at full cover. */
+
+/* Sprite width. Rows are spaced by viewport HEIGHT (percent) but the sprite
+   was sized purely in vw, so on a tall narrow phone a 62vw cloud is only
+   ~115px tall against ~185px of row spacing — the wall came out full of
+   holes and never blanketed the screen, exposing the scroll reset it exists
+   to hide. Flooring the width against vh keeps every row taller than its own
+   spacing at any aspect ratio. Landscape/desktop still take the vw branch,
+   so the wall there is unchanged. */
+const CLOUD_ASPECT = 2.1; // pixel-cloud.webp is 1818×865
+const cloudWidth = (w: number) => `max(${w}vw, ${Math.round(w * 1.2)}vh)`;
 const COVER_CLOUDS: { x: number; y: number; w: number; flip?: boolean }[] = [
   { x: 5, y: 98, w: 62 },
   { x: 35, y: 103, w: 68, flip: true },
@@ -165,7 +175,10 @@ export default function LaunchReplay() {
       tl.to(
         el,
         {
-          x: () => dir * window.innerWidth * 1.35,
+          // Measured off the sprite itself: a fixed multiple of the viewport
+          // width left wide phone clouds still hanging in frame after the
+          // part, since they can now be wider than the viewport.
+          x: () => dir * (window.innerWidth + el.offsetWidth),
           duration: 1,
           ease: "power2.in",
         },
@@ -202,7 +215,7 @@ export default function LaunchReplay() {
       <button
         type="button"
         onClick={begin}
-        className="inline-block cursor-pointer bg-accent-magenta px-8 py-4 font-pixel text-xs text-void-deep transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105 active:scale-[0.98]"
+        className="inline-block cursor-pointer touch-manipulation bg-accent-magenta px-8 py-4 font-pixel text-xs text-void-deep transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105 active:scale-[0.98]"
         style={{
           boxShadow:
             "0 -4px 0 0 #ff2e97, 0 4px 0 0 #ff2e97, -4px 0 0 0 #ff2e97, 4px 0 0 0 #ff2e97, 0 0 28px rgba(255,46,151,0.5)",
@@ -310,9 +323,10 @@ export default function LaunchReplay() {
                 style={{
                   left: `${c.x}%`,
                   top: `${c.y}%`,
-                  width: `${c.w}vw`,
-                  marginLeft: `${-c.w / 2}vw`,
-                  marginTop: `${-c.w / 4.2}vw`,
+                  width: cloudWidth(c.w),
+                  // centre the sprite on its (x, y) anchor
+                  marginLeft: `calc(${cloudWidth(c.w)} / -2)`,
+                  marginTop: `calc(${cloudWidth(c.w)} / ${-2 * CLOUD_ASPECT})`,
                   // Bottom row stacks frontmost; each higher row slides in
                   // behind the one below it, so the wall reads as filling
                   // up from the ground.

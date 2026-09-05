@@ -12,6 +12,36 @@ Rules:
 
 ## Changelog
 
+### 2026-09-05 — Mobile layout + reduced-motion fixes
+
+Three defects, all only reachable on a phone or with "reduce motion" on:
+
+- `src/components/WorldsSection.tsx` — the planet pods were side-mounted at
+  `-left-18 / -right-18` at every width below xl, which on a 390px viewport
+  sliced roughly a third off each planet and stranded the track label in open
+  space beside it. Below `sm` the pod now stacks: planet centered, label and a
+  `TAP TO EXPAND` affordance underneath (touch has no hover, so the desktop
+  `CLICK TO EXPAND` hint was never reachable there). Roll-in travel is capped
+  at `min(900px, 92vw)` so phones get a roll from just offscreen rather than a
+  900px lurch. `sm` and up are untouched.
+- `src/components/transitions/LaunchReplay.tsx` — the cloud wall was sized in
+  `vw` while its rows are spaced in `%` of viewport HEIGHT. On desktop a 62vw
+  sprite is ~893px wide (425 tall) against ~190px rows, so it overlapped into a
+  solid wall; on a phone the same sprite is ~242px wide (115 tall) against
+  ~185px rows, so the wall came out full of holes and never reached past ~40%
+  of the screen. The scroll-snap-to-top it exists to hide happened in plain
+  sight. Width is now floored against vh (`max(Nvw, N*1.2vh)`), and the parting
+  sweep measures `el.offsetWidth` instead of assuming a fixed multiple of
+  viewport width, since a sprite can now be wider than the viewport.
+- `src/components/ui/TeamStrip.tsx` (new) + `sections/MeetTheTeam.tsx` — the
+  global `animation-duration: 0.01ms !important` reduced-motion rule froze the
+  crew marquee dead inside its `overflow-hidden` box, leaving 15 of 17 members
+  permanently unreachable. Under reduced motion the marquee is now swapped for
+  a real scroll container with prev/next controls beneath it (edges disable at
+  the ends, steps one card per press, `behavior: "auto"` so the control itself
+  does not animate). Default motion behavior is unchanged.
+- `src/app/globals.css` — `.hj-no-scrollbar` for the rail.
+
 ### 2026-07-02 — Tracks section rebuilt as "CHOOSE YOUR WORLD" (WebGL pixel planets)
 
 Ported the "FOUR WORLDS" reference (`../planets.html`) into the tracks section:

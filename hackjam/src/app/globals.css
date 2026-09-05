@@ -669,3 +669,15 @@ html[data-intro="launching"] .hj-chrome {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Crew rail (components/ui/TeamStrip.tsx): the reduced-motion fallback is a
+   real scroll container, but a native scrollbar under the cards breaks the
+   pixel look. Controls sit below it, and the region stays keyboard- and
+   touch-scrollable. */
+.hj-no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hj-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

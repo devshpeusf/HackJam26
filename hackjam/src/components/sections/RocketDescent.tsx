@@ -8,7 +8,7 @@ import Sponsors from "@/components/sections/Sponsors";
 
 /**
  * The signature set-piece (spec §7): a scroll-scrubbed re-entry. The section
- * is 300vh tall; a sticky viewport pins the scene while GSAP scrubs the
+ * is 360vh tall; a sticky viewport pins the scene while GSAP scrubs the
  * rocket down through the atmosphere. Scroll is the single source of truth.
  */
 export default function RocketDescent() {
@@ -26,7 +26,7 @@ export default function RocketDescent() {
           trigger: section,
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.8,
+          scrub: 1.35,
         },
       });
 
@@ -34,11 +34,13 @@ export default function RocketDescent() {
         q("[data-rocket]"),
         { yPercent: -180, xPercent: -30, rotation: -6 },
         {
-          yPercent: 160,
-          xPercent: 30,
-          rotation: 6,
-          ease: "none",
-          duration: 0.8,
+          // Keep the capsule in-frame through the first three cloud banks.
+          // The final leg below carries it into the fourth cloud by Judges.
+          yPercent: 35,
+          xPercent: 24,
+          rotation: 4,
+          ease: "power1.inOut",
+          duration: 0.88,
         },
         0,
       )
@@ -50,15 +52,21 @@ export default function RocketDescent() {
           { autoAlpha: 1, duration: 0.15, ease: "none" },
           0,
         )
-        // Final dive: drift down-right into the last cloud's mass (the
-        // clouds layer stacks above the scene, so the capsule slips behind
-        // it), then fade as a safety net for viewports the cloud misses.
+        // Glide down-right into the opaque mass of the fourth cloud. The
+        // cloud layer has z-10, so it physically covers the capsule instead
+        // of a visibility toggle making the capsule disappear early.
         .to(
           q("[data-rocket]"),
-          { x: "24vw", y: "8vh", rotation: 10, ease: "none", duration: 0.2 },
-          0.8,
+          {
+            x: "20vw",
+            y: "12vh",
+            yPercent: 135,
+            rotation: 8,
+            ease: "power1.in",
+            duration: 0.12,
+          },
+          0.88,
         )
-        .to(q("[data-rocket]"), { autoAlpha: 0, duration: 0.06 }, 0.94)
         .fromTo(
           q("[data-streaks]"),
           { opacity: 0 },
@@ -80,7 +88,7 @@ export default function RocketDescent() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-[300vh]">
+    <section ref={sectionRef} className="relative h-[360vh]">
       {/* Clouds sit in normal flow, so they scroll past the pinned scene */}
       <AtmosphereClouds />
       {/* Sponsors heading sits above the cloud band; no z-index so the
@@ -106,7 +114,9 @@ export default function RocketDescent() {
         </div>
 
         <div data-rocket className="will-change-transform">
-          <PixelCapsule size={104} />
+          <div data-rocket-visual className="motion-reduce:invisible">
+            <PixelCapsule size={190} />
+          </div>
         </div>
 
         <p

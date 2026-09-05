@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { siteConfig } from "@/config/site";
-import Reveal from "@/components/effects/Reveal";
+import TeamEntrance from "@/components/effects/TeamEntrance";
 import SectionHeading from "@/components/ui/SectionHeading";
 import TeamStrip from "@/components/ui/TeamStrip";
 
@@ -89,16 +89,18 @@ function TeamCard({ member, index }: { member: Member; index: number }) {
 export default function MeetTheTeam() {
   return (
     <section id="team" className="flex min-h-[82dvh] w-full scroll-mt-14 flex-col items-center justify-center overflow-x-clip pt-36 pb-36 sm:pt-48 sm:pb-48">
-      <Reveal className="flex w-full flex-col items-center">
-        <SectionHeading
-          title="MEET THE TEAM"
-          sub="These are the humans who made the descent to make HackJam26 possible."
-          accent="var(--color-accent-cyan)"
-          className="mb-10 px-4 sm:mb-14"
-          subClassName="max-w-xl font-pixel text-xs sm:text-sm"
-        />
+      <TeamEntrance className="flex w-full flex-col items-center">
+        <div data-team-heading>
+          <SectionHeading
+            title="MEET THE TEAM"
+            sub="These are the humans who made the descent to make HackJam26 possible."
+            accent="var(--color-accent-cyan)"
+            className="mb-10 px-4 sm:mb-14"
+            subClassName="max-w-xl font-pixel text-xs sm:text-sm"
+          />
+        </div>
 
-        <div data-reveal className="flex w-full flex-col gap-5 sm:gap-7">
+        <div data-team-strip className="flex w-full flex-col gap-5 sm:gap-7">
           {/* One row, drifting on its own until the cursor lands on it.
               Under reduced motion TeamStrip swaps the drift for a scrollable
               rail with prev/next controls, so the crew stays reachable
@@ -109,7 +111,7 @@ export default function MeetTheTeam() {
             ))}
           </TeamStrip>
         </div>
-      </Reveal>
+      </TeamEntrance>
     </section>
   );
 }

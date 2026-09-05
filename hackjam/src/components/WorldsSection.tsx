@@ -204,7 +204,7 @@ export default function WorldsSection() {
           ref={(el) => {
             triggerRefs.current[i] = el;
           }}
-          className="relative flex min-h-[360px] items-center justify-center py-10 max-sm:h-auto sm:h-[78vh] sm:py-0 xl:h-[92vh]"
+          className="relative flex min-h-[360px] items-center justify-center py-10 max-sm:h-auto sm:h-[70vh] sm:py-0 xl:h-[70vh]"
         >
           <PlanetPod
             world={world}

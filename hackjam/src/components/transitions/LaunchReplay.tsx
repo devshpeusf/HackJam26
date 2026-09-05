@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap";
 import { siteConfig } from "@/config/site";
+import PixelButton from "@/components/ui/PixelButton";
 import {
   PixelExhaustPlume,
   PixelRocket,
@@ -212,17 +213,9 @@ export default function LaunchReplay() {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={begin}
-        className="inline-block cursor-pointer touch-manipulation bg-accent-magenta px-8 py-4 font-pixel text-xs text-void-deep transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105 active:scale-[0.98]"
-        style={{
-          boxShadow:
-            "0 -4px 0 0 #ff2e97, 0 4px 0 0 #ff2e97, -4px 0 0 0 #ff2e97, 4px 0 0 0 #ff2e97, 0 0 28px rgba(255,46,151,0.5)",
-        }}
-      >
-        PLAY AGAIN?
-      </button>
+      <PixelButton onClick={begin} variant="magenta" size="md">
+        Play Again?
+      </PixelButton>
 
       {playing && (
         <div

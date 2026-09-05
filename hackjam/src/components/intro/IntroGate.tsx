@@ -29,8 +29,6 @@ const IGNORED_KEYS = new Set([
   "OS",
 ]);
 
-/** Floor on the boot phase so a warm cache doesn't flash the loading bar. */
-const MIN_BOOT_MS = 650;
 const FLIGHT = 1.15;
 
 const pct = (n: number) => `${n * 100}%`;
@@ -85,7 +83,9 @@ export default function IntroGate() {
     };
   }, []);
 
-  // Boot: real progress from image decode + font readiness.
+  // Boot: real progress from the two critical cabinet images. Fonts use
+  // display:swap, so waiting for every font file here only delays the start
+  // prompt without preventing a usable first render.
   useEffect(() => {
     let cancelled = false;
 
@@ -95,8 +95,6 @@ export default function IntroGate() {
       // A missing asset must never wedge the gate at the loading bar.
       return img.decode().catch(() => undefined);
     });
-    if (document.fonts?.ready) tasks.push(document.fonts.ready);
-
     let settled = 0;
     tasks.forEach((task) => {
       void task.finally(() => {
@@ -106,8 +104,10 @@ export default function IntroGate() {
       });
     });
 
-    const floor = new Promise((r) => setTimeout(r, MIN_BOOT_MS));
-    void Promise.all([Promise.allSettled(tasks), floor]).then(() => {
+    // Do not hold visitors behind an artificial timer. On a warm browser
+    // cache this moves straight to the start prompt; on a cold load it still
+    // waits for the cabinet artwork and fonts that the intro actually needs.
+    void Promise.allSettled(tasks).then(() => {
       if (cancelled) return;
       setProgress(1);
       advance("ready");
@@ -189,61 +189,78 @@ export default function IntroGate() {
     site.style.position = "relative";
     site.style.zIndex = "95"; // between backdrop (90) and cabinet (100)
 
-    // Cover the hole, then clip to it. A hair of over-scale avoids a
-    // sub-pixel seam of backdrop at the edges.
-    const scale = Math.max(r.width / vw, r.height / vh) * 1.003;
-    const x = r.left + (r.width - vw * scale) / 2;
-    const y = r.top + (r.height - vh * scale) / 2;
+    const originX = r.left + r.width / 2;
+    const originY = r.top + r.height / 2;
+    // Grow the hole to cover the viewport, about its own centre.
+    const cameraScale = Math.max(vw / r.width, vh / r.height);
+    const flight = { progress: 0 };
 
-    // clip-path resolves in the element's own untransformed space, so the clip
-    // rect is the preimage of the hole under the transform.
-    const clip = {
-      top: (r.top - y) / scale,
-      right: vw - (r.right - x) / scale,
-      bottom: vh - (r.bottom - y) / scale,
-      left: (r.left - x) / scale,
+    gsap.set([backdrop, cabinet], {
+      transformOrigin: `${originX}px ${originY}px`,
+    });
+
+    // Cabinet scale and the site's reveal are both derived from the same
+    // progress value every frame, instead of running as two independently
+    // tweened properties. Two separate linear tweens only agree at the two
+    // endpoints they were set up for — the site's on-screen edge is its own
+    // scale times its clip-path inset (so it moves quadratically in
+    // progress) while the cabinet's hole edge moves linearly, and the two
+    // drift apart for most of the flight, flashing a gap at the seam. Driving
+    // both from one shared progress value keeps them locked together at
+    // every instant, not just at 0 and 1.
+    const seam = 2; // px of overlap so rounding error never peeks through
+    const syncFlight = () => {
+      const p = flight.progress;
+      const cabinetScale = 1 + (cameraScale - 1) * p;
+
+      const reveal = {
+        left: Math.max(0, (r.left - seam) * (1 - p)),
+        top: Math.max(0, (r.top - seam) * (1 - p)),
+        right: Math.min(vw, r.right + seam + (vw - r.right - seam) * p),
+        bottom: Math.min(vh, r.bottom + seam + (vh - r.bottom - seam) * p),
+      };
+
+      const revealWidth = reveal.right - reveal.left;
+      const revealHeight = reveal.bottom - reveal.top;
+      // Slight overscan fades to an exact 1:1 page at the end of the flight.
+      const pageScale =
+        Math.max(revealWidth / vw, revealHeight / vh) * (1 + 0.003 * (1 - p));
+      const pageX = (reveal.left + reveal.right - vw * pageScale) / 2;
+      const pageY = (reveal.top + reveal.bottom - vh * pageScale) / 2;
+      const clip = {
+        top: (reveal.top - pageY) / pageScale,
+        right: vw - (reveal.right - pageX) / pageScale,
+        bottom: vh - (reveal.bottom - pageY) / pageScale,
+        left: (reveal.left - pageX) / pageScale,
+      };
+
+      gsap.set([backdrop, cabinet], { scale: cabinetScale });
+      gsap.set(site, {
+        x: pageX,
+        y: pageY,
+        scale: pageScale,
+        clipPath: `inset(${clip.top}px ${clip.right}px ${clip.bottom}px ${clip.left}px)`,
+      });
     };
 
     gsap.set(site, {
       transformOrigin: "0 0",
-      x,
-      y,
-      scale,
-      clipPath: `inset(${clip.top}px ${clip.right}px ${clip.bottom}px ${clip.left}px)`,
-      willChange: "transform",
+      willChange: "transform,clip-path",
     });
-
-    // Grow the hole to cover the viewport, about its own centre.
-    const cameraScale = Math.max(vw / r.width, vh / r.height);
-    const originX = r.left + r.width / 2;
-    const originY = r.top + r.height / 2;
+    syncFlight();
 
     gsap
       .timeline({ onComplete: finish })
       // Reveal the site behind the hole.
       .to(contentRef.current, { autoAlpha: 0, duration: 0.28, ease: "power2.in" }, 0)
       .to(fillRef.current, { autoAlpha: 0, duration: 0.32, ease: "power2.in" }, 0.12)
-      // Both intro layers share one tween so the bezel can never drift from
-      // the content it frames.
       .to(
-        [backdrop, cabinet],
+        flight,
         {
-          scale: cameraScale,
-          transformOrigin: `${originX}px ${originY}px`,
+          progress: 1,
           duration: FLIGHT,
           ease: "power3.inOut",
-        },
-        0.18,
-      )
-      .to(
-        site,
-        {
-          x: 0,
-          y: 0,
-          scale: 1,
-          clipPath: "inset(0px 0px 0px 0px)",
-          duration: FLIGHT,
-          ease: "power3.inOut",
+          onUpdate: syncFlight,
         },
         0.18,
       )

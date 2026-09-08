@@ -69,12 +69,12 @@ export default function About() {
     <section
       ref={sectionRef}
       id="about"
-      className="mt-16 flex min-h-[88dvh] scroll-mt-14 flex-col items-center justify-center px-4 py-20 sm:mt-36 sm:py-24"
+      className="mt-8 flex min-h-[88dvh] scroll-mt-14 flex-col items-center justify-center px-4 py-10 sm:mt-36 sm:py-24"
     >
-      <div className="mx-auto grid w-full max-w-[82rem] items-center gap-12 px-4 py-10 sm:px-8 lg:-translate-x-[6vw] lg:grid-cols-[0.9fr_1.1fr] lg:gap-8">
+      <div className="mx-auto grid w-full max-w-[82rem] items-center gap-12 px-4 py-4 sm:px-8 sm:py-10 lg:-translate-x-[6vw] lg:grid-cols-[0.9fr_1.1fr] lg:gap-8">
         {/* Both halves anchor toward the centerline so the pair reads as
             one tight, symmetric composition */}
-        <div className="relative flex min-h-72 items-start justify-center px-6 pb-10 pt-32 sm:pt-40 lg:-translate-x-16 lg:justify-end lg:px-0 xl:-translate-x-24">
+        <div className="relative flex min-h-72 items-start justify-center px-6 pb-8 pt-24 sm:pb-10 sm:pt-40 lg:-translate-x-16 lg:justify-end lg:px-0 xl:-translate-x-24">
           <div data-about-illustration>
             <div
               className="relative z-10 w-56 sm:w-72"

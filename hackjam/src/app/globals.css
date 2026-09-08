@@ -447,23 +447,51 @@
     filter: brightness(1.12);
   }
 
-  /* SHPE USF footer logo — slightly dimmed at rest, cyan neon bloom on
-     hover/keyboard focus. */
-  .hj-shpe-logo img {
-    opacity: 0.82;
+  /* SHPE USF footer logo. The glow lives on a separate layer so hover never
+     has to interpolate stacked drop-shadow filters on the logo bitmap. */
+  .hj-shpe-logo {
+    position: relative;
+    isolation: isolate;
+    display: inline-block;
+  }
+  .hj-shpe-logo::before {
+    content: "";
+    position: absolute;
+    inset: -28% -16%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.94);
+    background: radial-gradient(
+      ellipse,
+      color-mix(in srgb, var(--color-accent-cyan) 28%, transparent) 0%,
+      color-mix(in srgb, var(--color-accent-cyan) 14%, transparent) 44%,
+      transparent 72%
+    );
     transition:
-      opacity 0.3s ease-out,
-      filter 0.3s ease-out;
+      opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .hj-shpe-logo img {
+    position: relative;
+    display: block;
+    opacity: 0.82;
+    transform: translateZ(0);
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hj-shpe-logo:hover::before,
+  .hj-shpe-logo:focus-visible::before {
+    opacity: 1;
+    transform: scale(1);
   }
   .hj-shpe-logo:hover img,
   .hj-shpe-logo:focus-visible img {
     opacity: 1;
-    filter: drop-shadow(
-        0 0 10px color-mix(in srgb, var(--color-accent-cyan) 65%, transparent)
-      )
-      drop-shadow(
-        0 0 28px color-mix(in srgb, var(--color-accent-cyan) 35%, transparent)
-      );
+  }
+  .hj-shpe-logo:focus-visible {
+    outline: 2px solid var(--color-accent-cyan);
+    outline-offset: 10px;
   }
 
   /* Pixelated reveal: opacity/blur snap through discrete steps instead of
@@ -549,17 +577,6 @@
   }
   50% {
     transform: translateY(8px);
-  }
-}
-@keyframes hj-flame {
-  0%,
-  100% {
-    transform: scaleY(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scaleY(0.72);
-    opacity: 0.85;
   }
 }
 /* Meteor streak: travels down-left in the first 15% of the cycle, then hides
@@ -668,4 +685,23 @@ html[data-intro="launching"] .hj-chrome {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Crew rail (components/ui/TeamStrip.tsx): the reduced-motion fallback is a
+   real scroll container, but a native scrollbar under the cards breaks the
+   pixel look. Controls sit below it, and the region stays keyboard- and
+   touch-scrollable. */
+.hj-no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hj-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Standalone CTA pulse. The animation used to live only inside
+   .hj-pixel-btn; PixelButton opts into it with the `pulse` prop. Keyframes
+   hardcode magenta, so this is for the registration CTA only. */
+.hj-cta-pulse {
+  animation: hj-cta-pulse 2.6s ease-in-out infinite;
 }

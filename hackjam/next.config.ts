@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // This repository has a second lockfile one directory above the app. Pin
+  // Turbopack here so its dependency graph and generated cache stay scoped to
+  // HackJam instead of being inferred from the parent workspace.
+  turbopack: {
+    root: __dirname,
+  },
+
   images: {
     // AVIF first, WebP as fallback. Only affects images rendered through
     // next/image — currently just the team photos in MeetTheTeam.

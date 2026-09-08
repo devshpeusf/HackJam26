@@ -4,18 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import { ScrollTrigger } from "@/lib/gsap";
 import { siteConfig } from "@/config/site";
 
-const EASE_SPRING = "cubic-bezier(0.34,1.56,0.64,1)";
+const EASE_GLIDE = "cubic-bezier(0.22,1,0.36,1)";
 
 /* Four side-mounted clouds spread through the descent, placed like the
    planet pods: alternating edges, half the sprite hanging off-screen.
-   Tops are % of the host section (RocketDescent's 300vh), starting far
+   Tops are % of the host section (RocketDescent's 360vh), starting far
    enough down that the first cloud appears once the sky has turned blue. */
 const CLOUDS = [
   { top: "30%", left: true, width: "clamp(960px, 136vw, 2080px)", flip: false },
   { top: "48%", left: false, width: "clamp(800px, 112vw, 1720px)", flip: true },
   { top: "66%", left: true, width: "clamp(880px, 120vw, 1840px)", flip: true },
-  { top: "84%", left: false, width: "clamp(1000px, 144vw, 2240px)", flip: false },
+  { top: "94%", left: false, width: "clamp(1000px, 144vw, 2240px)", flip: false },
 ] as const;
+const FINAL_CLOUD_INDEX = CLOUDS.length - 1;
 
 /**
  * Scroll-revealed pixel clouds for the atmosphere leg of the descent.
@@ -25,7 +26,7 @@ const CLOUDS = [
 export default function AtmosphereClouds() {
   const refs = useRef<(HTMLDivElement | null)[]>([]);
   const [visible, setVisible] = useState<boolean[]>(() =>
-    CLOUDS.map(() => false),
+    CLOUDS.map((_, i) => i === FINAL_CLOUD_INDEX),
   );
 
   useEffect(() => {
@@ -41,6 +42,7 @@ export default function AtmosphereClouds() {
       setVisible((v) => v.map((x, j) => (j === i ? on : x)));
     const triggers = refs.current.map(
       (el, i) =>
+        i !== FINAL_CLOUD_INDEX &&
         el &&
         ScrollTrigger.create({
           trigger: el,
@@ -69,6 +71,7 @@ export default function AtmosphereClouds() {
         return (
           <div
             key={i}
+            data-cloud-index={i}
             ref={(el) => {
               refs.current[i] = el;
             }}
@@ -81,7 +84,7 @@ export default function AtmosphereClouds() {
                 width: c.width,
                 transform: `translateX(${visible[i] ? settled : hidden})`,
                 opacity: visible[i] ? 1 : 0,
-                transition: `transform .9s ${EASE_SPRING}, opacity .6s ease`,
+                transition: `transform 1.2s ${EASE_GLIDE}, opacity .75s ease-out`,
               }}
             >
               {sponsor && (

@@ -20,24 +20,31 @@ function PlanetPod({
   visible: boolean;
   onOpen: () => void;
 }) {
+  // Phones (<sm) stack the pod: planet centered, label underneath. Side-
+  // mounting only works once there is room beside the planet for the label —
+  // below that the planet gets sliced by the viewport edge and the label
+  // floats off on its own. From sm up the original side-mount is unchanged.
   const side = left
-    ? "-left-90 max-xl:-left-18"
-    : "-right-90 max-xl:-right-18";
+    ? "sm:-left-18 xl:-left-90"
+    : "sm:-right-18 xl:-right-90";
   const labelSide = left
-    ? "left-[calc(100%+30px)] max-xl:left-[calc(100%+12px)]"
-    : "right-[calc(100%+30px)] text-right max-xl:right-[calc(100%+12px)]";
+    ? "sm:left-[calc(100%+12px)] xl:left-[calc(100%+30px)]"
+    : "sm:right-[calc(100%+12px)] sm:text-right xl:right-[calc(100%+30px)]";
   // Spin-in entrance: the world rolls in from its edge — offset, rotated a
   // full-ish turn and scaled down — then springs upright at full size. The
   // rotation direction matches travel, so it reads as rolling, not twirling.
+  // The travel distance is capped to the viewport so phones get a roll that
+  // starts just offscreen instead of a 900px lurch.
+  const roll = "min(900px, 92vw)";
   const entrance = visible
     ? "translateX(0) rotate(0deg) scale(1)"
     : left
-      ? "translateX(-900px) rotate(-270deg) scale(0.3)"
-      : "translateX(900px) rotate(270deg) scale(0.3)";
+      ? `translateX(calc(-1 * ${roll})) rotate(-270deg) scale(0.3)`
+      : `translateX(${roll}) rotate(270deg) scale(0.3)`;
 
   return (
     <div
-      className={`pointer-events-none absolute top-1/2 z-20 -translate-y-1/2 ${side}`}
+      className={`pointer-events-none z-20 flex flex-col items-center gap-6 sm:absolute sm:top-1/2 sm:block sm:-translate-y-1/2 ${side}`}
     >
       <div
         onClick={onOpen}
@@ -50,7 +57,7 @@ function PlanetPod({
         role="button"
         tabIndex={0}
         aria-label={`View ${world.name} track details`}
-        className={`group pointer-events-auto relative h-52 w-52 cursor-pointer will-change-transform sm:h-60 sm:w-60 xl:h-200 xl:w-200 ${
+        className={`group pointer-events-auto relative h-56 w-56 cursor-pointer will-change-transform sm:h-60 sm:w-60 xl:h-200 xl:w-200 ${
           visible ? "opacity-100" : "opacity-0"
         }`}
         style={{
@@ -73,7 +80,7 @@ function PlanetPod({
         {/* track label + faded watermark, same line, + hint on the inner
             (visible) side */}
         <div
-          className={`hj-pixel-fade pointer-events-none absolute top-1/2 flex -translate-y-1/2 items-baseline gap-4 whitespace-nowrap delay-[850ms] ${labelSide} ${
+          className={`hj-pixel-fade pointer-events-none mt-6 flex flex-col items-center gap-1 whitespace-nowrap delay-[850ms] sm:absolute sm:top-1/2 sm:mt-0 sm:-translate-y-1/2 sm:flex-row sm:items-baseline sm:gap-4 ${labelSide} ${
             visible ? "is-visible" : ""
           }`}
         >
@@ -82,6 +89,11 @@ function PlanetPod({
           </span>
           <span className="hidden font-pixel text-[16px] tracking-[0.2em] text-star-white/20 xl:inline">
             {world.num} · {world.name.toUpperCase()}
+          </span>
+          {/* Touch has no hover, so phones get a persistent tap affordance
+              instead of the desktop hover hint below. */}
+          <span className="font-pixel text-[9px] tracking-[0.18em] text-accent-violet/90 sm:hidden">
+            TAP TO EXPAND
           </span>
         </div>
         <div
@@ -192,7 +204,7 @@ export default function WorldsSection() {
           ref={(el) => {
             triggerRefs.current[i] = el;
           }}
-          className="relative flex h-[68vh] items-center justify-center sm:h-[78vh] xl:h-[92vh]"
+          className="relative flex min-h-[360px] items-center justify-center py-10 max-sm:h-auto sm:h-[70vh] sm:py-0 xl:h-[70vh]"
         >
           <PlanetPod
             world={world}

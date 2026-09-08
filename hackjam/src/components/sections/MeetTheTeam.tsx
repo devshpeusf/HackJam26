@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { siteConfig } from "@/config/site";
-import Reveal from "@/components/effects/Reveal";
+import TeamEntrance from "@/components/effects/TeamEntrance";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { Marquee } from "@/components/ui/marquee";
+import TeamStrip from "@/components/ui/TeamStrip";
 
 function initials(name: string) {
   return name
@@ -23,7 +23,8 @@ function TeamCard({ member, index }: { member: Member; index: number }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`${member.name} on LinkedIn`}
-      className="pixel-card group flex w-56 shrink-0 flex-col px-4 py-5 transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-1 sm:w-64 sm:px-5 sm:py-6"
+      data-crew-card
+      className="pixel-card group flex w-56 shrink-0 snap-start flex-col px-4 py-5 transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-1 sm:w-64 sm:px-5 sm:py-6"
       style={
         {
           "--pc-glow":
@@ -87,29 +88,30 @@ function TeamCard({ member, index }: { member: Member; index: number }) {
  */
 export default function MeetTheTeam() {
   return (
-    <section id="team" className="flex min-h-[82dvh] w-full scroll-mt-14 flex-col items-center justify-center overflow-hidden pt-36 pb-36 sm:pt-48 sm:pb-48">
-      <Reveal className="flex w-full flex-col items-center">
-        <SectionHeading
-          title="MEET THE TEAM"
-          sub="These are the humans who made the descent to make HackJam26 possible."
-          accent="var(--color-accent-cyan)"
-          className="mb-10 px-4 sm:mb-14"
-          subClassName="max-w-xl font-pixel text-xs sm:text-sm"
-        />
+    <section id="team" className="flex min-h-[82dvh] w-full scroll-mt-14 flex-col items-center justify-center overflow-x-clip pt-36 pb-36 sm:pt-48 sm:pb-48">
+      <TeamEntrance className="flex w-full flex-col items-center">
+        <div data-team-heading>
+          <SectionHeading
+            title="MEET THE TEAM"
+            sub="These are the humans who made the descent to make HackJam26 possible."
+            accent="var(--color-accent-cyan)"
+            className="mb-10 px-4 sm:mb-14"
+            subClassName="max-w-xl font-pixel text-xs sm:text-sm"
+          />
+        </div>
 
-        <div
-          data-reveal
-          className="flex w-full flex-col gap-5 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] sm:gap-7"
-        >
-          {/* One row, drifting on its own until the cursor lands on it
-              (pauseOnHover). */}
-          <Marquee pauseOnHover className="[--duration:30s] [--gap:2rem] sm:[--gap:2.5rem]">
+        <div data-team-strip className="flex w-full flex-col gap-5 sm:gap-7">
+          {/* One row, drifting on its own until the cursor lands on it.
+              Under reduced motion TeamStrip swaps the drift for a scrollable
+              rail with prev/next controls, so the crew stays reachable
+              instead of frozen two cards in. */}
+          <TeamStrip>
             {siteConfig.team.map((member, i) => (
               <TeamCard key={member.name} member={member} index={i} />
             ))}
-          </Marquee>
+          </TeamStrip>
         </div>
-      </Reveal>
+      </TeamEntrance>
     </section>
   );
 }

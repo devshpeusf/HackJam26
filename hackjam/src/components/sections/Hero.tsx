@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { siteConfig } from "@/config/site";
+import PixelButton from "@/components/ui/PixelButton";
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -44,7 +45,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative flex min-h-[100dvh] flex-col items-center justify-start px-4 pb-20 pt-24 text-center sm:pt-28">
+    <section ref={sectionRef} className="relative flex min-h-[78dvh] flex-col items-center justify-start px-4 pb-8 pt-24 text-center sm:min-h-[100dvh] sm:pb-20 sm:pt-28">
       <div className="flex flex-col items-center gap-8">
         {/* This is the LCP element. fetchPriority raises it above the
             browser's default guess for a late-discovered image; decoding
@@ -55,7 +56,7 @@ export default function Hero() {
           data-hero-logo
           src="/gifs/HackJam26_black_levitate.webp"
           alt={siteConfig.name}
-          className="crisp w-[min(92vw,64rem)] max-w-full"
+          className="crisp mt-14 w-[min(92vw,64rem)] max-w-full sm:mt-20"
           decoding="async"
           fetchPriority="high"
         />
@@ -64,17 +65,15 @@ export default function Hero() {
           {siteConfig.eventDate} &middot; {siteConfig.venue}
         </p>
 
-        <a
+        <PixelButton
           data-hero-detail
           href={siteConfig.registrationUrl}
-          className="mt-2 inline-block bg-accent-magenta px-10 py-5 font-pixel text-sm text-void-deep transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105 active:scale-[0.98]"
-          style={{
-            boxShadow:
-              "0 -4px 0 0 #ff2e97, 0 4px 0 0 #ff2e97, -4px 0 0 0 #ff2e97, 4px 0 0 0 #ff2e97",
-          }}
+          variant="magenta"
+          size="lg"
+          className="mt-2"
         >
-          REGISTER NOW
-        </a>
+          Register Now
+        </PixelButton>
       </div>
     </section>
   );

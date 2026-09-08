@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { siteConfig } from "@/config/site";
+import PixelButton from "@/components/ui/PixelButton";
 import MlhTrustBadge from "@/components/MlhTrustBadge";
 
 const LINKS = [
@@ -152,13 +153,13 @@ export default function Navbar() {
           <a
             href="#top"
             aria-label="HackJam — back to top"
-            className="relative mr-auto h-full w-[8rem] shrink-0 overflow-visible sm:w-[10rem]"
+            className="relative mr-auto flex h-full shrink-0 items-center overflow-visible"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/logo/hackjam26-triangle.webp"
+              src="/logo/hackjam26-header.webp"
               alt=""
-              className="crisp absolute left-0 top-5 h-24 w-auto sm:top-4 sm:h-28"
+              className="crisp h-14 w-auto sm:h-15"
             />
           </a>
 
@@ -197,14 +198,15 @@ export default function Navbar() {
             >
               <DiscordIcon className="h-5 w-5" />
             </a>
-            <a
+            <PixelButton
               href={siteConfig.registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hj-pixel-btn px-4 py-2 font-pixel text-[12px] tracking-[0.12em]"
+              external
+              variant="magenta"
+              size="sm"
+              pulse
             >
-              APPLY NOW
-            </a>
+              Apply Now
+            </PixelButton>
             <MlhTrustBadge id="mlh-trust-badge" />
           </div>
 
@@ -291,21 +293,26 @@ export default function Navbar() {
                 <DiscordIcon className="h-6 w-6" />
               </a>
             </motion.div>
-            <motion.a
-              href={siteConfig.registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setOpen(false)}
+            <motion.div
               initial={{ opacity: 0, y: reduced ? 0 : 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
                 delay: reduced ? 0 : 0.06 * (LINKS.length + 1),
                 duration: 0.3,
               }}
-              className="hj-pixel-btn mt-2 px-7 py-3.5 font-pixel text-xs"
+              className="mt-2"
             >
-              APPLY NOW
-            </motion.a>
+              <PixelButton
+                href={siteConfig.registrationUrl}
+                external
+                variant="magenta"
+                size="md"
+                pulse
+                onClick={() => setOpen(false)}
+              >
+                Apply Now
+              </PixelButton>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -5,6 +5,7 @@ import { useLayoutEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { siteConfig, type Judge } from "@/config/site";
 import SectionHeading from "@/components/ui/SectionHeading";
+import ScrollRail from "@/components/ui/ScrollRail";
 
 function JudgeCard({ judge, index }: { judge: Judge; index: number }) {
   const socials = Object.entries(judge.socials).filter(([, href]) => href);
@@ -64,7 +65,7 @@ function JudgeCard({ judge, index }: { judge: Judge; index: number }) {
                 ?
               </span>
               <span className="relative font-pixel text-[8px] tracking-[0.22em] text-star-white/40">
-                {judge.role.toUpperCase()}
+                {judge.tba ? judge.role.toUpperCase() : "PHOTO INBOUND"}
               </span>
             </div>
           )}
@@ -74,9 +75,11 @@ function JudgeCard({ judge, index }: { judge: Judge; index: number }) {
           <h3 className="font-pixel text-[10px] leading-[1.8] text-star-white sm:text-[11px]">
             {judge.name.toUpperCase()}
           </h3>
-          <p className="mt-2 text-sm leading-relaxed text-accent-cyan">
-            {judge.role}
-          </p>
+          {judge.role && (
+            <p className="mt-2 text-sm leading-relaxed text-accent-cyan">
+              {judge.role}
+            </p>
+          )}
           <p className="mt-1 font-pixel text-[9px] uppercase leading-relaxed text-accent-magenta">
             JUDGING PANEL
           </p>
@@ -182,7 +185,7 @@ export default function Judges() {
     <section
       id="judges"
       ref={sectionRef}
-      className="relative flex min-h-[82dvh] scroll-mt-14 flex-col items-center justify-center overflow-hidden px-4 py-20 sm:py-24"
+      className="relative flex min-h-[82dvh] scroll-mt-14 flex-col items-center justify-center overflow-hidden px-4 pt-52 pb-20 sm:pt-72 sm:pb-24"
     >
       {/* The setting pixel sun — behind the content, sinking on scroll */}
       <div
@@ -200,24 +203,30 @@ export default function Judges() {
         <div data-judges-heading>
           <SectionHeading
             title="JUDGES"
-            sub="The crew scoring your final descent. Panel announced soon."
+            sub="The crew scoring your final descent. Scroll the panel."
             accent="var(--color-star-warm)"
             className="mb-14"
           />
         </div>
 
-        <div
-          className="grid w-full max-w-6xl grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3 sm:gap-8"
-        >
-          {siteConfig.judges.map((judge, i) => (
-            <div
-              key={`${judge.name}-${judge.role}`}
-              data-judge-card-motion
-              className="will-change-transform"
-            >
-              <JudgeCard judge={judge} index={i} />
-            </div>
-          ))}
+        <div className="w-full max-w-6xl">
+          <ScrollRail
+            label="Judges"
+            cardSelector="[data-judge-card-motion]"
+            gap={28}
+            smooth
+            railClassName="gap-7 px-4 py-2 sm:px-6"
+          >
+            {siteConfig.judges.map((judge, i) => (
+              <div
+                key={judge.name}
+                data-judge-card-motion
+                className="w-[272px] shrink-0 snap-start will-change-transform sm:w-[296px]"
+              >
+                <JudgeCard judge={judge} index={i} />
+              </div>
+            ))}
+          </ScrollRail>
         </div>
       </div>
     </section>

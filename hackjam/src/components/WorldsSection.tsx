@@ -84,10 +84,10 @@ function PlanetPod({
             visible ? "is-visible" : ""
           }`}
         >
-          <span className="font-pixel text-[12px] tracking-[0.14em] text-star-white/80 sm:text-[14px] sm:tracking-[0.18em] xl:text-[20px] xl:tracking-[0.22em]">
+          <span className="font-pixel text-[15px] tracking-[0.14em] text-star-white/80 sm:text-[18px] sm:tracking-[0.18em] xl:text-[26px] xl:tracking-[0.22em]">
             {world.name.toUpperCase()}
           </span>
-          <span className="hidden font-pixel text-[16px] tracking-[0.2em] text-star-white/20 xl:inline">
+          <span className="hidden font-pixel text-[20px] tracking-[0.2em] text-star-white/20 xl:inline">
             {world.num} · {world.name.toUpperCase()}
           </span>
           {/* Touch has no hover, so phones get a persistent tap affordance
@@ -204,7 +204,7 @@ export default function WorldsSection() {
           ref={(el) => {
             triggerRefs.current[i] = el;
           }}
-          className="relative flex min-h-[360px] items-center justify-center py-10 max-sm:h-auto sm:h-[70vh] sm:py-0 xl:h-[70vh]"
+          className="relative flex min-h-[360px] items-center justify-center py-16 max-sm:h-auto sm:h-[85vh] sm:py-0 xl:h-[85vh]"
         >
           <PlanetPod
             world={world}

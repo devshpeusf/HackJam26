@@ -185,7 +185,7 @@ export default function Judges() {
     <section
       id="judges"
       ref={sectionRef}
-      className="relative flex min-h-[82dvh] scroll-mt-14 flex-col items-center justify-center overflow-hidden px-4 py-20 sm:py-24"
+      className="relative flex min-h-[82dvh] scroll-mt-14 flex-col items-center justify-center overflow-hidden px-4 pt-52 pb-20 sm:pt-72 sm:pb-24"
     >
       {/* The setting pixel sun — behind the content, sinking on scroll */}
       <div

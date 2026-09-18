@@ -12,6 +12,25 @@ Rules:
 
 ## Changelog
 
+### 2026-09-17 — Official tracks, expanded crew, judges rail
+
+- `src/config/site.ts` — `worlds` now carries the real HackJam 26 tracks in
+  world order: Overall (Terran), Home Turf (Ringed), Off the Grid (Lunar).
+  Stats stay flavor text. Seven new `team` entries (Brenda Seminario,
+  Victoria Christoffel, Gerson Araujo Maciel Neto, Olumoroti Ojo-Akinkunmi,
+  Jaden Rodriguez, Mariafernanda Belisario, Jonathan Glasgow); Jorge Arevalo
+  is now "Judging Lead" with a photo. `judges` replaces the six TBA seats with
+  the 11 confirmed judges — `role`, `photo`, and `socials.linkedin` are empty
+  until they land, and the card hides each line when empty.
+- `src/components/ui/ScrollRail.tsx` (new) — the snap-scroll rail with
+  prev/next controls, extracted from `TeamStrip`'s reduced-motion branch so it
+  lives once. `smooth` opts into smooth scrolling; reduced motion always jumps.
+- `src/components/sections/Judges.tsx` — the 3-col grid is now a `ScrollRail`
+  of fixed-width cards (272px / 296px at sm), since 11+ judges no longer fit a
+  static grid. Swipe/trackpad scroll works natively.
+- `public/team/` — five new 640px-wide `.webp` headshots (brenda, jaden,
+  jorge, mariafernanda, olumoroti), converted from the originals with sharp.
+
 ### 2026-09-05 — Mobile layout + reduced-motion fixes
 
 Three defects, all only reachable on a phone or with "reduce motion" on:

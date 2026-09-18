@@ -66,46 +66,45 @@ export const siteConfig = {
     linkedin: "https://www.linkedin.com/company/shpe-usf",
   },
 
-  // Placeholder worlds for the Tracks section — swap names/blurbs/stats
-  // when the real track info lands.
+  // Official HackJam 26 tracks. `stats` is flavor text for the planet modal.
   worlds: [
     {
-      name: "Deep Mind",
+      name: "Best Overall",
       num: "TRACK 01",
       blurb:
-        "AI & machine learning. Train, fine-tune, or prompt your way to something clever.",
+        "Recognizes the strongest overall project, combining creativity, technical execution, functionality, and impact. This track celebrates a well-rounded solution that stands out through both its idea and execution.",
       planetIndex: 0,
       stats: {
         orbit: "12 HOURS",
-        temp: "GPU-HOT",
-        radius: "1B PARAMS",
-        atm: "PURE HYPE",
+        temp: "7,800°F",
+        radius: "Everything",
+        atm: "PURE AMBITION",
       },
     },
     {
-      name: "Cloud Nine",
+      name: "Home Turf",
       num: "TRACK 02",
       blurb:
-        "Web & cloud. Full-stack apps, APIs, and tools people can use the same day.",
+        "Look around your campus, neighborhood, or community and identify something that could be improved. Build a solution that addresses a local challenge and creates meaningful impact close to home.",
       planetIndex: 3,
       stats: {
-        orbit: "99.9% UPTIME",
-        temp: "COOL EDGE",
-        radius: "GLOBAL CDN",
-        atm: "VAPORWARE-FREE",
+        orbit: "LOW & CLOSE",
+        temp: "TAMPA WARM",
+        radius: "ONE BLOCK",
+        atm: "NEIGHBORLY",
       },
     },
     {
-      name: "Circuit World",
+      name: "Off the Grid",
       num: "TRACK 03",
       blurb:
-        "Hardware & embedded. Sensors, robots, and things that beep in real life.",
+        "Build something that helps people live more sustainably. Think reducing waste, saving energy or water, improving transportation, growing food, or helping people make greener choices.",
       planetIndex: 1,
       stats: {
-        orbit: "60 HZ",
-        temp: "+3.3 V",
-        radius: "0805 SMD",
-        atm: "SOLDER SMOKE",
+        orbit: "SOLAR-POWERED",
+        temp: "NET ZERO",
+        radius: "LOW FOOTPRINT",
+        atm: "CLEAN AIR",
       },
     },
   ] satisfies WorldTrack[],
@@ -153,9 +152,9 @@ export const siteConfig = {
     },
     {
       name: "Jorge Arevalo",
-      role: "Assistant Lead",
+      role: "Judging Lead",
       team: "Executive",
-      photo: "",
+      photo: "/team/jorge-arevalo.webp",
       linkedin: "https://www.linkedin.com/in/jorge-arevalo-933875332/",
     },
     {
@@ -171,6 +170,20 @@ export const siteConfig = {
       team: "Tech Initiatives",
       photo: "/team/prachi-lohana.webp",
       linkedin: "https://www.linkedin.com/in/prachi-lohana6/?skipRedirect=true",
+    },
+    {
+      name: "Brenda Seminario",
+      role: "Graphic Design Director",
+      team: "Marketing",
+      photo: "/team/brenda-seminario.webp",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Victoria Christoffel",
+      role: "Graphic Design Director",
+      team: "Marketing",
+      photo: "",
+      linkedin: LINKEDIN_PLACEHOLDER,
     },
     {
       name: "Sara Suleiman",
@@ -192,6 +205,13 @@ export const siteConfig = {
       team: "Hacker's Experience",
       photo: "/team/andres-pistocchi.webp",
       linkedin: "https://www.linkedin.com/in/andres-pistocchi-375075296/",
+    },
+    {
+      name: "Gerson Araujo Maciel Neto",
+      role: "Director",
+      team: "Hacker's Experience",
+      photo: "",
+      linkedin: LINKEDIN_PLACEHOLDER,
     },
     {
       name: "Ian Lopez",
@@ -229,6 +249,13 @@ export const siteConfig = {
       linkedin: "https://www.linkedin.com/in/alejandraquintana0416/",
     },
     {
+      name: "Olumoroti Ojo-Akinkunmi",
+      role: "Director",
+      team: "Logistics",
+      photo: "/team/olumoroti-ojo-akinkunmi.webp",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
       name: "Tomas Torrado",
       role: "Lead",
       team: "Tech Development",
@@ -250,11 +277,25 @@ export const siteConfig = {
       linkedin: "https://www.linkedin.com/in/juandc21/",
     },
     {
+      name: "Jaden Rodriguez",
+      role: "Director",
+      team: "Tech Development",
+      photo: "/team/jaden-rodriguez.webp",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
       name: "Nishtha Krukeja",
       role: "Lead",
       team: "Workshop",
       photo: "/team/nishtha-krukeja.webp",
       linkedin: "https://www.linkedin.com/in/nishthakukreja/",
+    },
+    {
+      name: "Mariafernanda Belisario",
+      role: "Director",
+      team: "Workshop",
+      photo: "/team/mariafernanda-belisario.webp",
+      linkedin: LINKEDIN_PLACEHOLDER,
     },
     {
       name: "Alexander Sonkin",
@@ -263,17 +304,31 @@ export const siteConfig = {
       photo: "/team/alexander-sonkin.webp",
       linkedin: "https://www.linkedin.com/in/alexanderjsonkin/",
     },
+    {
+      name: "Jonathan Glasgow",
+      role: "Engagement Director",
+      team: "Ambassador",
+      photo: "",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
   ] satisfies TeamMember[],
 
-  // Placeholder panel — swap names/photos/socials (and drop `tba`) as
-  // judges are confirmed.
+  // Confirmed HackJam 26 judges. Fill in as details land:
+  //  - role:   "Title, Company" (empty hides the line)
+  //  - photo:  drop the headshot at public/judges/<first>-<last>.webp
+  //  - socials.linkedin: profile URL (empty hides the chip)
   judges: [
-    { name: "To Be Announced", role: "Seat 01", photo: "", socials: {}, tba: true },
-    { name: "To Be Announced", role: "Seat 02", photo: "", socials: {}, tba: true },
-    { name: "To Be Announced", role: "Seat 03", photo: "", socials: {}, tba: true },
-    { name: "To Be Announced", role: "Seat 04", photo: "", socials: {}, tba: true },
-    { name: "To Be Announced", role: "Seat 05", photo: "", socials: {}, tba: true },
-    { name: "To Be Announced", role: "Seat 06", photo: "", socials: {}, tba: true },
+    { name: "Akshay Sharma", role: "", photo: "", socials: {} },
+    { name: "Danil Matrosov", role: "", photo: "", socials: {} },
+    { name: "Hari Prasad", role: "", photo: "", socials: {} },
+    { name: "Nandish Nanjappa", role: "", photo: "", socials: {} },
+    { name: "Nutan Sahoo", role: "", photo: "", socials: {} },
+    { name: "Prakshal Doshi", role: "", photo: "", socials: {} },
+    { name: "Sanjoy Sarkar", role: "", photo: "", socials: {} },
+    { name: "Silu Panda", role: "", photo: "", socials: {} },
+    { name: "Vaibhav Jain", role: "", photo: "", socials: {} },
+    { name: "Vishal Punjabi", role: "", photo: "", socials: {} },
+    { name: "Yesha Patel", role: "", photo: "", socials: {} },
   ] satisfies Judge[],
 
   sponsors: [

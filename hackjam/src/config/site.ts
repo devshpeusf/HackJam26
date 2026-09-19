@@ -319,16 +319,16 @@ export const siteConfig = {
   //  - socials.linkedin: profile URL (empty hides the chip)
   judges: [
     { name: "Akshay Sharma", role: "", photo: "", socials: {} },
-    { name: "Danil Matrosov", role: "", photo: "", socials: {} },
+    { name: "Danil Matrosov", role: "", photo: "/judges/Danil Matrosov.jpg", socials: {} },
     { name: "Hari Prasad", role: "", photo: "", socials: {} },
     { name: "Nandish Nanjappa", role: "", photo: "", socials: {} },
-    { name: "Nutan Sahoo", role: "", photo: "", socials: {} },
-    { name: "Prakshal Doshi", role: "", photo: "", socials: {} },
+    { name: "Nutan Sahoo", role: "Applied Scientist, Microsoft", photo: "/judges/Nutan Sahoo.jpg", socials: {"linkedin": "https://www.linkedin.com/in/nutan-sahoo/"} },
+    { name: "Prakshal Doshi", role: "Site Reliability Engineer, Apple", photo: "/judges/Prakshal Doshi.png", socials: {"linkedin": "https://www.linkedin.com/in/prakshal-doshi/"} },
     { name: "Sanjoy Sarkar", role: "", photo: "", socials: {} },
-    { name: "Silu Panda", role: "", photo: "", socials: {} },
-    { name: "Vaibhav Jain", role: "", photo: "", socials: {} },
-    { name: "Vishal Punjabi", role: "", photo: "", socials: {} },
-    { name: "Yesha Patel", role: "", photo: "", socials: {} },
+    { name: "Silu Panda", role: "Software Engineer, LinkedIn", photo: "/judges/Silu Panda.jpg", socials: {"linkedin": "https://www.linkedin.com/in/silupanda/"} },
+    { name: "Vaibhav Jain", role: "Software Engineer, Google", photo: "/judges/Vaibhav Jain.jpg", socials: {"linkedin": "https://www.linkedin.com/in/vaibhavjain2391/"} },
+    { name: "Vishal Punjabi", role: "Applied Scientist, SAP", photo: "/judges/Vishal Punjabi.jpg", socials: {"linkedin": "https://www.linkedin.com/in/vshalpnjabi/"} },
+    { name: "Yesha Patel", role: "Enterprise Solution Architect, IBM", photo: "/judges/Yesha Patel.png", socials: {"linkedin": "https://www.linkedin.com/in/yesha-patel-4b645b1b/"} },
   ] satisfies Judge[],
 
   sponsors: [

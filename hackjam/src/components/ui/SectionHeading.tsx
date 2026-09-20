@@ -24,7 +24,7 @@ export default function SectionHeading({
     <div className={`flex flex-col items-center gap-5 text-center ${className ?? ""}`}>
       <h2
         data-reveal
-        className="font-pixel text-2xl leading-relaxed text-star-white sm:text-4xl"
+        className="font-pixel text-[clamp(2rem,6vw,4rem)] leading-relaxed text-star-white"
       >
         {title}
       </h2>

@@ -207,10 +207,9 @@ export default function Navbar() {
             >
               Apply Now
             </PixelButton>
-            <MlhTrustBadge id="mlh-trust-badge" />
           </div>
 
-          {/* hamburger (mobile) */}
+          {/* hamburger (mobile) — sits just left of the MLH badge */}
           <button
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -226,6 +225,14 @@ export default function Navbar() {
               <span key={i} className="block h-0.5 w-4 bg-star-white" />
             ))}
           </button>
+
+          {/* One badge instance for every breakpoint — MLH's check needs a
+              single visible #mlh-trust-badge, so it lives outside the
+              desktop-only row. */}
+          <MlhTrustBadge
+            id="mlh-trust-badge"
+            className="ml-4 block w-[72px] shrink-0 self-start sm:w-[90px] md:ml-6 lg:ml-8"
+          />
         </div>
       </nav>
 

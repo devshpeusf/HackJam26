@@ -87,7 +87,7 @@ export default function ScrollRail({
         role="region"
         aria-label={`${label}, scrollable`}
         tabIndex={0}
-        className={`hj-no-scrollbar flex w-full snap-x snap-mandatory overflow-x-auto [scroll-padding-inline:1rem] ${railClassName}`}
+        className={`hj-no-scrollbar flex w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden [scroll-padding-inline:1rem] ${railClassName}`}
       >
         {children}
       </div>

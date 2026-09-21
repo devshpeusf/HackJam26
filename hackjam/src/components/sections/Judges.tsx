@@ -13,7 +13,7 @@ function JudgeCard({ judge, index }: { judge: Judge; index: number }) {
   return (
     <article
       data-judge-card
-      className="pixel-card pixel-card-hover group flex flex-col px-5 py-5 sm:px-6 sm:py-6"
+      className="pixel-card pixel-card-hover group flex w-full flex-col px-5 py-5 sm:px-6 sm:py-6"
       style={
         {
           "--pc-border": "var(--color-void-700)",
@@ -33,7 +33,7 @@ function JudgeCard({ judge, index }: { judge: Judge; index: number }) {
         </span>
       </div>
 
-      <div className="flex flex-col items-center gap-4 text-center">
+      <div className="flex flex-1 flex-col items-center gap-4 text-center">
         <div
           className="shrink-0 p-1 transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-rotate-2 group-hover:scale-105"
           style={{
@@ -86,7 +86,7 @@ function JudgeCard({ judge, index }: { judge: Judge; index: number }) {
         </div>
 
         {socials.length > 0 && (
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-auto flex flex-wrap items-center justify-center gap-3">
             {socials.map(([network, href]) => (
               <a
                 key={network}
@@ -221,7 +221,7 @@ export default function Judges() {
               <div
                 key={judge.name}
                 data-judge-card-motion
-                className="w-[272px] shrink-0 snap-start will-change-transform sm:w-[296px]"
+                className="flex w-[272px] shrink-0 snap-start will-change-transform sm:w-[296px]"
               >
                 <JudgeCard judge={judge} index={i} />
               </div>

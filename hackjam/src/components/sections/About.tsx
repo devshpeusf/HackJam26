@@ -124,7 +124,7 @@ export default function About() {
 
         <div className="flex w-full max-w-2xl flex-col text-left lg:justify-self-start">
           <span data-about-copy className="pixel-chip mb-5 w-fit text-accent-cyan">MISSION BRIEF</span>
-          <h2 data-about-copy className="font-pixel text-2xl leading-relaxed text-nebula-core sm:text-4xl">
+          <h2 data-about-copy className="font-pixel text-[clamp(2rem,6vw,4rem)] leading-relaxed text-nebula-core">
             WHAT IS HACKJAM?
           </h2>
           <p data-about-copy className="mt-6 max-w-2xl text-lg leading-8 text-star-white/84">

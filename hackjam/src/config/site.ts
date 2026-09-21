@@ -210,7 +210,7 @@ export const siteConfig = {
       name: "Gerson Araujo Maciel Neto",
       role: "Director",
       team: "Hacker's Experience",
-      photo: "",
+      photo: "/team/gerson-araujo-maciel-neto.webp",
       linkedin: LINKEDIN_PLACEHOLDER,
     },
     {

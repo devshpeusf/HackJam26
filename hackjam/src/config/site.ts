@@ -176,7 +176,7 @@ export const siteConfig = {
       role: "Graphic Design Director",
       team: "Marketing",
       photo: "/team/brenda-seminario.webp",
-      linkedin: LINKEDIN_PLACEHOLDER,
+      linkedin: "https://www.linkedin.com/in/brenda-seminario-prelle-4667a2437/",
     },
     {
       name: "Victoria Christoffel",
@@ -253,7 +253,7 @@ export const siteConfig = {
       role: "Director",
       team: "Logistics",
       photo: "/team/olumoroti-ojo-akinkunmi.webp",
-      linkedin: LINKEDIN_PLACEHOLDER,
+      linkedin: "https://www.linkedin.com/in/olumoroti-ojo-akinkunmi/",
     },
     {
       name: "Tomas Torrado",
@@ -281,7 +281,7 @@ export const siteConfig = {
       role: "Director",
       team: "Tech Development",
       photo: "/team/jaden-rodriguez.webp",
-      linkedin: LINKEDIN_PLACEHOLDER,
+      linkedin: "https://www.linkedin.com/in/jrodd1203/",
     },
     {
       name: "Nishtha Krukeja",
@@ -295,7 +295,7 @@ export const siteConfig = {
       role: "Director",
       team: "Workshop",
       photo: "/team/mariafernanda-belisario.webp",
-      linkedin: LINKEDIN_PLACEHOLDER,
+      linkedin: "https://www.linkedin.com/in/mariafernanda-belisario-perez/",
     },
     {
       name: "Alexander Sonkin",
@@ -309,7 +309,7 @@ export const siteConfig = {
       role: "Engagement Director",
       team: "Ambassador",
       photo: "",
-      linkedin: LINKEDIN_PLACEHOLDER,
+      linkedin: "https://www.linkedin.com/in/jonathanglasgowusf/",
     },
   ] satisfies TeamMember[],
 

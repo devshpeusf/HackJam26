@@ -53,7 +53,7 @@ export const siteConfig = {
   name: "HackJam",
   tagline: "Build something legendary in 12 hours.",
   registrationUrl: "https://apply.hackjam26.com",
-  eventDate: "Fall 2026",
+  eventDate: "November 21st",
   venue: "University of South Florida",
   mlh: {
     label: "An MLH Member Event",

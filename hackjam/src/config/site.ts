@@ -52,7 +52,7 @@ export type WorldTrack = {
 export const siteConfig = {
   name: "HackJam",
   tagline: "Build something legendary in 12 hours.",
-  registrationUrl: "https://events.mlh.com/events/14412-hackjam-26",
+  registrationUrl: "https://apply.hackjam26.com",
   eventDate: "Fall 2026",
   venue: "University of South Florida",
   mlh: {

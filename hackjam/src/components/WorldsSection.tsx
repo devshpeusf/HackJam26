@@ -195,7 +195,7 @@ export default function WorldsSection() {
         TRACKS
       </h2>
       <p data-tracks-intro className="mx-auto mb-8 max-w-3xl text-center font-pixel text-base leading-loose text-star-white/70 sm:text-lg">
-        Three tracks. Three worlds. Pick where your project lands.
+        Click on the planets to reveal the tracks.
       </p>
 
       {worlds.map((world, i) => (

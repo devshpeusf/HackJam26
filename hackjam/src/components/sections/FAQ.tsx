@@ -201,7 +201,7 @@ export default function FAQ() {
 
         <PixelButton
           data-faq-cta
-          href="mailto:team@hackjam.dev"
+          href="mailto:hackabull.dev@gmail.com"
           variant="outline"
           size="md"
           className="mt-14 text-accent-magenta"

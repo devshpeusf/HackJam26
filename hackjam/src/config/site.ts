@@ -186,6 +186,13 @@ export const siteConfig = {
       linkedin: LINKEDIN_PLACEHOLDER,
     },
     {
+      name: "Odalys Miranda",
+      role: "Design Director",
+      team: "Marketing",
+      photo: "",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
       name: "Sara Suleiman",
       role: "Social Media Manager",
       team: "Marketing",
@@ -256,6 +263,34 @@ export const siteConfig = {
       linkedin: "https://www.linkedin.com/in/olumoroti-ojo-akinkunmi/",
     },
     {
+      name: "Bonsan",
+      role: "Director",
+      team: "Logistics",
+      photo: "/team/bonsan.webp",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Arsh Patel",
+      role: "Director",
+      team: "Outreach",
+      photo: "/team/arsh-patel.webp",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Daksh Kumar",
+      role: "Director",
+      team: "Outreach",
+      photo: "",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
+      name: "Diego Robles",
+      role: "Director",
+      team: "Outreach",
+      photo: "/team/diego-robles.webp",
+      linkedin: LINKEDIN_PLACEHOLDER,
+    },
+    {
       name: "Tomas Torrado",
       role: "Lead",
       team: "Tech Development",
@@ -318,13 +353,15 @@ export const siteConfig = {
   //  - photo:  drop the headshot at public/judges/<first>-<last>.webp
   //  - socials.linkedin: profile URL (empty hides the chip)
   judges: [
-    { name: "Akshay Sharma", role: "", photo: "", socials: {} },
-    { name: "Danil Matrosov", role: "", photo: "/judges/Danil Matrosov.jpg", socials: {} },
+    { name: "Akshay Sharma", role: "", photo: "/judges/Akshay Sharma.png", socials: {} },
+    { name: "Danil Matrosov", role: "", photo: "/judges/Danil Matrosov.jpg", socials: {"linkedin": "https://www.linkedin.com/in/danil-matrosov-736b4535b/"} },
     { name: "Hari Prasad", role: "", photo: "", socials: {} },
+    { name: "Hashem Alsailani", role: "Lead Software Applications Engineer, Galileo Group", photo: "/judges/Hashem Alsailani.jpg", socials: {"linkedin": "https://www.linkedin.com/in/hashem-alsailani/"} },
+    { name: "Kevin Antony", role: "Engineering Solutions, ReliaQuest", photo: "/judges/Kevin Antony.jpg", socials: {"linkedin": "https://www.linkedin.com/in/krlaa/"} },
     { name: "Nandish Nanjappa", role: "", photo: "", socials: {} },
     { name: "Nutan Sahoo", role: "Applied Scientist, Microsoft", photo: "/judges/Nutan Sahoo.jpg", socials: {"linkedin": "https://www.linkedin.com/in/nutan-sahoo/"} },
     { name: "Prakshal Doshi", role: "Site Reliability Engineer, Apple", photo: "/judges/Prakshal Doshi.png", socials: {"linkedin": "https://www.linkedin.com/in/prakshal-doshi/"} },
-    { name: "Sanjoy Sarkar", role: "", photo: "", socials: {} },
+    { name: "Sanjoy Sarkar", role: "", photo: "/judges/Sanjoy Sarkar.png", socials: {"linkedin": "https://www.linkedin.com/in/iamsanjoysarkar/"} },
     { name: "Silu Panda", role: "Software Engineer, LinkedIn", photo: "/judges/Silu Panda.jpg", socials: {"linkedin": "https://www.linkedin.com/in/silupanda/"} },
     { name: "Vaibhav Jain", role: "Software Engineer, Google", photo: "/judges/Vaibhav Jain.jpg", socials: {"linkedin": "https://www.linkedin.com/in/vaibhavjain2391/"} },
     { name: "Vishal Punjabi", role: "Applied Scientist, SAP", photo: "/judges/Vishal Punjabi.jpg", socials: {"linkedin": "https://www.linkedin.com/in/vshalpnjabi/"} },

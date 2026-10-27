@@ -48,7 +48,7 @@ function JudgeCard({ judge, index }: { judge: Judge; index: number }) {
               width={192}
               height={192}
               sizes="(min-width: 640px) 192px, 176px"
-              className="crisp h-44 w-44 object-cover transition-[filter] duration-500 grayscale group-hover:grayscale-0 sm:h-48 sm:w-48"
+              className="crisp h-44 w-44 object-cover sm:h-48 sm:w-48"
             />
           ) : (
             <div className="relative flex h-44 w-44 flex-col items-center justify-center gap-3 overflow-hidden bg-void-700 sm:h-48 sm:w-48">

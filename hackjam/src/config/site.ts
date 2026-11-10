@@ -126,6 +126,11 @@ export const siteConfig = {
         "HackJam is open to all currently enrolled college students. Teams of 1–3 members are welcome.",
     },
     {
+      question: "Can I walk in in case I didn't apply?",
+      answer:
+        "YES — HackJam will be accepting walk-in hackers.",
+    },
+    {
       question: "How much does it cost to attend?",
       answer:
         "HackJam is completely free to attend, including meals, swag, and workshops throughout the event.",

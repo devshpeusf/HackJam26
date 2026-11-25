@@ -358,18 +358,12 @@ export const siteConfig = {
   //  - photo:  drop the headshot at public/judges/<first>-<last>.webp
   //  - socials.linkedin: profile URL (empty hides the chip)
   judges: [
-    { name: "Akshay Sharma", role: "", photo: "/judges/akshay-sharma.webp", socials: {} },
-    { name: "Danil Matrosov", role: "", photo: "/judges/danil-matrosov.webp", socials: {"linkedin": "https://www.linkedin.com/in/danil-matrosov-736b4535b/"} },
-    { name: "Hari Prasad", role: "", photo: "", socials: {} },
+    { name: "Chandra Kambhamettu", role: "Professor, Bellini College of AI, Cybersecurity & Computing, USF", photo: "/judges/chandra-kambhamettu.webp", socials: {"linkedin": "https://www.linkedin.com/in/chandra-kambhamettu-6820ba9/"} },
     { name: "Hashem Alsailani", role: "Lead Software Applications Engineer, Galileo Group", photo: "/judges/hashem-alsailani.webp", socials: {"linkedin": "https://www.linkedin.com/in/hashem-alsailani/"} },
-    { name: "Kevin Antony", role: "Engineering Solutions, ReliaQuest", photo: "/judges/kevin-antony.webp", socials: {"linkedin": "https://www.linkedin.com/in/krlaa/"} },
-    { name: "Nandish Nanjappa", role: "", photo: "", socials: {} },
-    { name: "Nutan Sahoo", role: "Applied Scientist, Microsoft", photo: "/judges/nutan-sahoo.webp", socials: {"linkedin": "https://www.linkedin.com/in/nutan-sahoo/"} },
-    { name: "Prakshal Doshi", role: "Site Reliability Engineer, Apple", photo: "/judges/prakshal-doshi.webp", socials: {"linkedin": "https://www.linkedin.com/in/prakshal-doshi/"} },
-    { name: "Sanjoy Sarkar", role: "", photo: "/judges/sanjoy-sarkar.webp", socials: {"linkedin": "https://www.linkedin.com/in/iamsanjoysarkar/"} },
-    { name: "Silu Panda", role: "Software Engineer, LinkedIn", photo: "/judges/silu-panda.webp", socials: {"linkedin": "https://www.linkedin.com/in/silupanda/"} },
-    { name: "Vaibhav Jain", role: "Software Engineer, Google", photo: "/judges/vaibhav-jain.webp", socials: {"linkedin": "https://www.linkedin.com/in/vaibhavjain2391/"} },
-    { name: "Vishal Punjabi", role: "Applied Scientist, SAP", photo: "/judges/vishal-punjabi.webp", socials: {"linkedin": "https://www.linkedin.com/in/vshalpnjabi/"} },
+    { name: "Dr. Jim Anderson", role: "Associate Professor & Program Director, Bellini College of AI, USF", photo: "/judges/jim-anderson.webp", socials: {"linkedin": "https://www.linkedin.com/in/drjimanderson/"} },
+    { name: "Kevin Antony", role: "Software Engineer, ReliaQuest", photo: "/judges/kevin-antony.webp", socials: {"linkedin": "https://www.linkedin.com/in/krlaa/"} },
+    { name: "Nithesh Gudipuri", role: "Associate Director, Architecture & Modernization, Raymond James", photo: "/judges/nithesh-gudipuri.webp", socials: {"linkedin": "https://www.linkedin.com/in/nithesh-gudipuri-8abb54225/"} },
+    { name: "Sanjoy Sarkar", role: "SVP, Senior Director, Head of Enterprise Workflow Automation & Robotics", photo: "/judges/sanjoy-sarkar.webp", socials: {"linkedin": "https://www.linkedin.com/in/iamsanjoysarkar/"} },
     { name: "Yesha Patel", role: "Enterprise Solution Architect, IBM", photo: "/judges/yesha-patel.webp", socials: {"linkedin": "https://www.linkedin.com/in/yesha-patel-4b645b1b/"} },
   ] satisfies Judge[],
 
